@@ -1,0 +1,65 @@
+﻿function createXmlRequest() 
+{ 
+   if(window.ActiveXObject) { 
+      var xmlHttps=["Microsoft.XMLHTTP","MSXML2.XMLHttp.5.0","MSXML2.XMLHttp4.0", "MSXML2.XMLHttp3.0","MSXML2.XMLHttp"];           
+       try  { 
+         for(var i=0;i<xmlHttps.length;i++) { 
+           var xmlHttp=new ActiveXObject(xmlHttps[i]); 
+           return xmlHttp; 
+         } 
+      } catch (error) { } 
+    } else  { 
+       var xmlHttp=new XMLHttpRequest(); 
+       return xmlHttp;
+   }
+}
+function ajaxget(xmlHttp, url) {
+    xmlHttp.open("GET", url, true);
+    xmlHttp.setRequestHeader("If-Modified-Since", "0");
+    xmlHttp.send("");
+}
+
+function mov(obj)
+{
+	obj.style.background="#f9fae8";
+}
+function movout(obj)
+{
+	var index=obj.id.replace("tr","");
+	if(parseInt(index)%2!=0)
+		{obj.style.background="#F5F5F5";}
+	else
+		{obj.style.background="#f0f0f0";}
+}	
+function moveout(obj)
+{
+	var index=obj.id.replace("tr","");
+	if(parseInt(index)%2!=0)
+		{obj.style.background="#dbf2ff";}
+	else
+		{obj.style.background="#f0f0f0";}
+} 
+var smlset;
+function setslave(index) 
+{	
+	if(index==1)
+		slave=0;
+	else
+		slave = document.getElementById("slave").value;
+	smlset = createXmlRequest();
+	smlset.onreadystatechange = setsl;	
+	ajaxget(smlset, "/setslave?a=" + slave +  "&");		
+}
+function setsl() {
+	if (smlset.readyState == 4) {
+		var sta = smlset.responseText;
+		if (sta == "err") {
+			window.location.reload();
+		}
+		else {
+			window.location.reload();
+		}
+	}
+}	
+		
+ 

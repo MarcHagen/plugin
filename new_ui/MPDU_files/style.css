@@ -1,0 +1,164 @@
+﻿/*@import "menu.css";*/
+/** 清除内外边距  */
+body, h1, h2, h3, h4, h5, h6, hr, p,
+blockquote, /* structural elements 结构元素 */
+dl, dt, dd, ul, ol, li, /* list elements 列表元素 */
+pre, /* text formatting elements 文本格式元素 */
+form, fieldset, legend, button, input, textarea, /* form elements 表单元素 */
+th, td, /* table elements 表格元素 */
+img/* img elements 图片元素 */{
+
+margin: 0;
+padding: 0;
+}
+/** 设置默认字体 **/
+body,button, input, select, textarea {
+font: 12px Arial, Helvetica, sans-serif; }
+h1, h2, h3, h4, h5, h6 { font-size: 100%; }
+em{font-style:normal;}
+/** 重置列表元素 **/
+ul, ol { list-style: none; }
+/** 重置超链接元素 **/
+a { text-decoration: none; color:#000;}
+a:hover { text-decoration: underline; color:#3363a7; }
+/** 重置图片元素 **/
+img{ border:0px;}
+/** 重置表格元素 **/
+table { border-collapse: collapse; border-spacing: 0; }
+
+/*清除浮动*/
+.clear{
+	height:0px;
+	line-height:0px;
+	font-size:0px;
+	clear:both;
+	}
+body{ background:#198bc9}
+#wrap_in{ width:600px; margin:0 auto ; border: 1px solid #0a76b0; height:287px; position:relative; top:100px; background:#0a76b0; text-align:center;
+border-top-left-radius:15px;
+border-top-right-radius:15px;
+border-bottom-right-radius:15px;
+border-bottom-left-radius:15px;
+}
+
+#content-wrap{ width:578px; border: 1px solid #dbf2ff; height:267px; position:relative; left:10px; top:10px; background:#dbf2ff;
+border-top-left-radius:20px;
+border-top-right-radius:20px;
+border-bottom-right-radius:20px;
+border-bottom-left-radius:20px;
+}
+.spa{ height:237px; width:285px; position:relative; top:15px; background:url(login-bg.png); margin:0 auto; text-align:center;}
+.cont{ width:300px; height:50px; font-size:16PX; position:relative; top:15px; left:-5px; color:#dbf2ff; }
+.field{ height:50px;   position:relative; top:30px; }
+.field label{ color:#dbf2ff}
+.btn{text-align:center; }
+.login-btn{ width:60px; height:25px; background:#009FFF; color:#dbf2ff;  position:relative; top:45px; text-align:center; border: 1px solid #dbf2ff;
+border-top-left-radius:4px;
+border-top-right-radius:4px;
+border-bottom-right-radius:4px;
+border-bottom-left-radius:4px;
+}	
+.fleft{ float:left}
+.fright{ float:right}
+#wrap{ width:100%;}
+#header{ height:78px; background:url(index-header-bg.gif) repeat-x;}
+.logo{ width:362px; height:51px; background:url(index-logo.gif);}
+.changeen{ width:25px; height:24px; margin-top:16px; margin-right:30px; position:relative; left:10px; color:#FFFFFF}
+.change{ width:23px; height:24px; margin-top:16px; margin-right:30px; color:#FFFFFF }
+.logout{ width:23px; height:24px; background:url(index-logout.gif); margin-top:14px;}
+.nav ul{ height:51px; overflow:hidden; color:#effaff}
+.nav li{ float:left; padding-top:27px; width:93px; height:51px; background:url(index-nav-bg.gif); text-align:center;}
+.nav li:hover{ background-position:0 -52px;}
+.nav .first:hover{ background-position:0 -52px;}
+
+.nav-left{ width:34px; height:51px; background:url(index-nav-left.gif);}
+.nav-right{ width:34px; height:51px; background:url(index-nav-right.gif);}
+.subnav{ height:27px; background:url(index-subnav-bg.gif)}
+.subnav .subnavLeft{ width:17px; height:27px; background:url(index-subnav-left.gif)}
+.subnav .subnavRight{ width:17px; height:27px; background:url(index-subnav-right.gif)}
+
+.page{ width:100%; height:830px; background:#198bc9}
+.page iframe{ margin:0 auto;}
+#content .space{ height:5px; font-size:0px; background:#198bc9}
+#footer{ width:100%; height:26px; line-height:26px; background:url(index-footer-bg.gif);}
+
+.stae_menu{ width:300px; min-height:100%; background:#e6f4fa; color:#075587; margin-left:0px;}
+.salvestate{ background:#dbf2ff;  padding:5px;  height:190px;}
+.pageTitle{ height:10px; line-height:10px;  background:#198bc9; }
+.salvedev{ background:#dbf2ff;  padding:5px; height:850px;}
+.salvedev1{ background:#dbf2ff;  padding:5px; height:800px;}
+.pagestate{ background:#dbf2ff;   margin-left:310px; min-height:100%;}
+.statedev{ background:#dbf2ff;  padding:5px;  height:90px;}
+.stateinto{ background:#dbf2ff;  padding:5px;  height:950px;}
+.limlitinto{ background:#dbf2ff;  padding:5px;  height:115px;}
+.limlitdev{ background:#dbf2ff;  padding:5px;  height:685px;}
+.limdev{ background:#dbf2ff;  padding:5px;  height:60px;}
+.unitlim{ background:#dbf2ff;  padding:5px;  height:1130px;}
+.energyinto{ background:#dbf2ff;  padding:5px;  height:1100px;}
+.portinto{ background:#dbf2ff;  padding:5px;  height:820px;}
+.devicedev{ background:#dbf2ff;  padding:5px;  height:290px;}
+.deviceinto{ background:#dbf2ff;  padding:5px;  height:390px;}
+.userinto{ background:#dbf2ff;  padding:5px;  height:700px;}
+.logsinto{ background:#dbf2ff;  padding:5px;  height:830px;}
+.dhcpdev{ background:#dbf2ff;  padding:5px;  height:95px;}
+.netdev{ background:#dbf2ff;  padding:5px;  height:170px;}
+.netinto{ background:#dbf2ff;  padding:5px;  height:395px;}
+.snmpdev{ background:#dbf2ff;  padding:5px;  height:235px;}
+.snmpinto{ background:#dbf2ff;  padding:5px;  height:330px;}
+.telnetdev{ background:#dbf2ff;  padding:5px;  height:260px;}
+.sntpinto{ background:#dbf2ff;  padding:5px;  height:585px;}
+
+.title_menu{ background:#e6f4fa; width:168px; min-height:100%; margin-left:0px;}
+.menu{ width:168px; height:760px; background:#e6f4fa; color:#075587;}
+.menu ul{ width:168px;}
+.menu .subMenuTitle{ background:url(index-menu-title.gif); text-align:center; height:27px; line-height:26px; color:#fff}
+.menu ul li{ width:168px; background:url(index-menu-bg.gif) no-repeat; text-align:left;}
+.menu ul li a{ height:26px; line-height:26px; color:#075587; position:relative; left:45px;}
+.menu ul li a:hover{ height:26px; line-height:26px; color:#075587; text-decoration:none; margin-left:10px;}
+
+.menu_set{ width:168px; height:830px; background:#e6f4fa; color:#075587;}
+.menu_set ul{ width:168px;}
+.menu_set .subMenuTitle{ background:url(index-menu-title.gif); text-align:center; height:27px; line-height:26px; color:#fff}
+.menu_set ul li{ width:168px; background:url(index-menu-bg.gif) no-repeat; text-align:left;}
+.menu_set ul li a{ height:26px; line-height:26px; color:#075587; position:relative; left:45px;}
+.menu_set ul li a:hover{ height:26px; line-height:26px; color:#075587; text-decoration:none; margin-left:10px;}
+
+.switchdev{ background:#dbf2ff;  padding:5px;  height:65px;}
+.switchinto{ background:#dbf2ff;  padding:5px;  height:1125px;}
+
+.menu_en{ width:168px; height:1220px; background:#e6f4fa; color:#075587;}
+.menu_en ul{ width:168px;}
+.menu_en .subMenuTitle{ background:url(index-menu-title.gif); text-align:center; height:27px; line-height:26px; color:#fff}
+.menu_en ul li{ width:168px; background:url(index-menu-bg.gif) no-repeat; text-align:left;}
+.menu_en ul li a{ height:26px; line-height:26px; color:#075587; position:relative; left:45px;}
+.menu_en ul li a:hover{ height:26px; line-height:26px; color:#075587; text-decoration:none; margin-left:10px;}
+
+.menu_group{ width:168px; height:1140px; background:#e6f4fa; color:#075587;}
+.menu_group ul{ width:168px;}
+.menu_group .subMenuTitle{ background:url(index-menu-title.gif); text-align:center; height:27px; line-height:26px; color:#fff}
+.menu_group ul li{ width:168px; background:url(index-menu-bg.gif) no-repeat; text-align:left;}
+.menu_group ul li a{ height:26px; line-height:26px; color:#075587; position:relative; left:45px;}
+.menu_group ul li a:hover{ height:26px; line-height:26px; color:#075587; text-decoration:none; margin-left:10px;}
+
+.logs_menu{ width:168px; height:840px; background:#e6f4fa; color:#075587;}
+.logs_menu ul{ width:168px;}
+.logs_menu .subMenuTitle{ background:url(index-menu-title.gif); text-align:center; height:27px; line-height:26px; color:#fff}
+.logs_menu ul li{ width:168px; background:url(index-menu-bg.gif) no-repeat; text-align:left;}
+.logs_menu ul li a{ height:26px; line-height:26px; color:#075587; position:relative; left:45px;}
+.logs_menu ul li a:hover{ height:26px; line-height:26px; color:#075587; text-decoration:none; margin-left:10px;}
+
+.pageColumn{ background:#dbf2ff;   margin-left:178px; min-height:100%;}
+.updata{ background:#dbf2ff;   margin-left:0; min-height:100%;}
+.kuang{ width:100%; border:0;  }
+
+.logsColumn{ background:#e6f4fa;   margin-left:178px; min-height:100%;}
+.pagelogs{ repeat-x; padding:5px;}
+.pagelogs table{ width:100%}
+.pagelogs thead{ border:1px solid #bfd8e0; color:#075587; }
+.pagelogs thead th{ border-left:1px solid #c5dbe2; text-align:center; height:28px; background:url(page-thead-bg.gif);}
+.pagelogs tbody tr{ border:1px solid #bfd8e0; height:28px;}
+.pagelogs tbody .trLight{ background:#f9fcfd}
+.pagelogs tbody .checkBox{ background:#f1f7f9; border:1px solid #bfd8e0; text-align:center}
+.pagelogs tbody td{ text-align:center;}
+
+/* .pageColumn */

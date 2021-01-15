@@ -1,0 +1,44 @@
+
+<!-- saved from url=(0033)http://192.168.25.129/system.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=GBK">
+
+<title>status</title>
+<script type="text/javascript" src="./my.js.下载"></script>
+<script type="text/javascript">
+    var xmlset;
+    function setdevice() 
+    {
+        var order = document.getElementById("order").value;
+        if(confirm("你确定要执行?")) {
+            xmlset = createXmlRequest();
+            xmlset.onreadystatechange = setdata;
+            ajaxget(xmlset, "/setsys?a=" + order + "&");
+        }
+    }
+    function setdata() {
+            setInterval("relogin();", 3000);
+    }
+    function relogin() {
+        window.parent.location.href="index.html";
+    }
+</script>
+</head>
+<body style="margin:0px; font-size:12px;">
+<br><table width="700">
+<tbody><tr align="left" style="color:#000000; height:22px; font-size:16px;font-family:Arial;">
+
+    <td colspan="2" style="position:absolute; left:0px;"><b>系统设置</b></td></tr>
+<tr><td><br></td><td></td></tr>
+<tr align="left" style="height:22px; font-size:13px;font-family:Arial;">
+<td style="width:120px;">选择命令:</td>
+<td><select id="order">
+<option value="0">重启</option>
+<option value="1">恢复出厂设置</option>
+</select></td>
+</tr>
+<tr><td><br></td><td></td></tr>
+<tr><td><input type="button" value="保存" onclick="setdevice();" style="font-size:13px;font-family:Arial;"></td><td></td></tr>
+</tbody></table>
+
+
+</body></html>

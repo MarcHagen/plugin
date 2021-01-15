@@ -1,0 +1,434 @@
+
+<!-- saved from url=(0034)http://192.168.41.181/correct.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=GBK">
+
+<title>status</title>
+<script type="text/javascript" src="./MPDU-correct_files/my.js.下载"></script>
+<script type="text/javascript">
+	var DeType;
+	function pageload() {
+        loaddata();	
+		checkCookie();
+    }	
+	function clearAllCookie(){
+		var date=new Date();
+		date.setTime(date.getTime()-10000);
+		var keys=document.cookie.match(/[^ =;]+(?=\=)/g);
+		console.log("username"+keys);
+		if (keys){
+			for (var i=keys.length; i--;){
+				document.cookie=keys[i]+"=0; expire="+date.toGMTString()+"; path=/";
+			}
+		}
+	}
+   function getCookie(name)
+	{
+		var cookieStr = document.cookie;
+		if(cookieStr.length > 0){
+			var cookieArr = cookieStr.split(";");
+			for (var i=0;i<cookieArr.length;i++)
+			{
+				var cookieVal = cookieArr[i].split("=");
+				if(cookieVal[0] == name){
+					return unescape(cookieVal[1]);
+				}
+			}
+		}
+	}  
+	function checkCookie()
+	{
+		var userName = getCookie("username");
+		if(userName){
+			loaddata();	
+		}
+		else{
+			clearAllCookie();
+			document.location.href = "/index.html";
+		}
+	}   
+	
+    var xmlget;
+    function loaddata() {
+        xmlget = createXmlRequest();
+        xmlget.onreadystatechange = getdata;
+        ajaxget(xmlget, "/getmac");
+    }
+    function getdata() {
+        if (xmlget.readyState == 4) {
+            var sta = xmlget.responseText;
+            var gv = new Array();
+            gv = sta.split("?");	 
+			document.getElementById("type").value = gv[0];
+			document.getElementById("language").value = gv[1];
+			document.getElementById("mac1").value = gv[2];
+			document.getElementById("value1").value = gv[3];
+			document.getElementById("value2").value = gv[4];
+			var ad_dc = parseInt(gv[5]);	
+			document.getElementById("Tvmin").value= parseInt(gv[6])/10;
+			document.getElementById("Tvmax").value= parseInt(gv[7])/10;
+			document.getElementById("Tcmin").value= parseInt(gv[8])/100;
+			document.getElementById("Tcmax").value= parseInt(gv[9])/100;	
+			document.getElementById("Temmin").value= parseInt(gv[10]);
+			document.getElementById("Temmax").value= parseInt(gv[11]);
+			document.getElementById("Hummin").value= parseInt(gv[12]);
+			document.getElementById("Hummax").value= parseInt(gv[13]);	
+			document.getElementById("min").value= parseInt(gv[14])/100;
+			document.getElementById("xmin").value= parseInt(gv[15])/100;
+			document.getElementById("xmax").value= parseInt(gv[16])/100;
+			document.getElementById("max").value= parseInt(gv[17])/100;	
+			document.getElementById("Txcmin").value= parseInt(gv[18])/100;
+			document.getElementById("Txcmax").value= parseInt(gv[19])/100;	
+			document.getElementById("serial").value= parseInt(gv[27]);	
+			document.getElementById("neutral").value= parseInt(gv[28]);	
+			document.getElementById("sensorbox").value= parseInt(gv[32]);
+			document.getElementById("VerticalLevel").value= parseInt(gv[33]);	
+			document.getElementById("level").value= parseInt(gv[34]);
+			document.getElementById("act1").value= parseInt(gv[35]);
+			document.getElementById("act2").value= parseInt(gv[36]);
+			document.getElementById("act3").value= parseInt(gv[37]);
+			document.getElementById("SwLcd").value= parseInt(gv[38]);
+			 DeType=parseInt(gv[0]);	
+			if(parseInt(gv[33])!=1)
+			{
+				document.getElementById("dis").style.display = "none";
+				document.getElementById("lcdsw").style.display = "none";
+			}			
+			for(var i=0;i<7;i++)
+			{
+				document.getElementById("line"+(i+1)).value= parseInt(gv[20+i]);
+				if(i<3)
+				{
+					document.getElementById("line"+(i+8)).value= parseInt(gv[29+i]);
+				}
+			}
+					
+			if(ad_dc==1)
+			{
+				document.getElementById("acdc").innerHTML = "A C"
+			}
+			else
+			{
+				document.getElementById("acdc").innerHTML = "D C"
+			}
+			if(gv[0]>1)
+			{
+				document.getElementById("tr1").style.display = "none";	
+				document.getElementById("tr2").style.display = "none";	
+				document.getElementById("ttr").style.display = "none";	
+			}
+			else
+			{
+				document.getElementById("tr4").style.display = "none";	
+				document.getElementById("tr7").style.display = "none";					
+			}
+			var HuiLu = gv[42];
+			if(HuiLu==6)
+			{
+				document.getElementById("cuit1").value= parseInt(gv[39]);
+				document.getElementById("cuit2").value= parseInt(gv[40]);
+				document.getElementById("cuit3").value= parseInt(gv[41]);			
+			}
+			else
+			{
+				document.getElementById("cuit1").style.display = "none";
+				document.getElementById("cuit2").style.display = "none";
+				document.getElementById("cuit3").style.display = "none";
+			}
+        }
+    }
+	
+	 var claerset;
+	function set(order) {    
+	    var type = document.getElementById("type").value;
+		var mac1 = document.getElementById("mac1").value;
+		var language = document.getElementById("language").value;
+		var line1 = document.getElementById("line1").value;
+		var line2 = document.getElementById("line2").value;
+		var line3 = document.getElementById("line3").value;
+		var line4 = document.getElementById("line4").value;
+		var line5 = document.getElementById("line5").value;
+		var line6 = document.getElementById("line6").value;
+		var line7 = document.getElementById("line7").value;	
+		var line8 = document.getElementById("line8").value;
+		var line9 = document.getElementById("line9").value;
+		var line10 = document.getElementById("line10").value;			
+		var serial = document.getElementById("serial").value;	
+		var neutral = document.getElementById("neutral").value;	
+		var sensorbox = document.getElementById("sensorbox").value;	
+		var VerticalLevel = document.getElementById("VerticalLevel").value;	
+		var level = document.getElementById("level").value;	
+		var LeLcdSw = document.getElementById("SwLcd").value;	
+        var cuit1 = document.getElementById("cuit1").value;	
+		var cuit2 = document.getElementById("cuit2").value;
+		var cuit3 = document.getElementById("cuit3").value;
+			
+		if(order>1)
+		{
+			if (confirm("Please make sure that the input source is the AC220V 6A 50Hz power supply, it will cause abnormal!!!") == false) {
+				return;
+			}
+			claerset = createXmlRequest();
+			claerset.onreadystatechange = setmac;
+			ajaxget(claerset, "/correct?a=" + order+"&");			
+		}
+		else
+		{
+			if (confirm("配置成功，重启后生效?") == false) {
+				return;
+			}			
+			claerset = createXmlRequest();
+			claerset.onreadystatechange = setmac;
+			ajaxget(claerset, "/correct?a=" +order+"&b="+type +"&c="+language + "&d="+mac1 + "&e="+line1 + "&f="+line2 + "&g="+line3 + "&h="+line4 + "&i="+line5 
+			        + "&j="+line6 + "&k="+line7 + "&l="+serial + "&m="+neutral + "&n="+line8 + "&u="+line9 + "&v="+line10 + "&w="+sensorbox + "&x="+VerticalLevel 
+					+ "&y="+level + "&z="+ LeLcdSw + "&aa="+ cuit1 + "&ab="+ cuit2 + "&ac="+ cuit3 + "&");					
+		}
+    }
+    function setmac() {
+        if (claerset.readyState == 4) {
+            var sta = claerset.responseText;
+            if (sta == "OK") {
+				window.location.href="correct.html";          
+            }
+            else {
+				window.location.href="correct.html";   	
+            }
+        }
+    }
+	
+	 var claerlimit;
+	function setlimit() {    
+	    var limit1 = document.getElementById("Tvmin").value*10;
+		var limit2 = document.getElementById("Tvmax").value*10;
+	    var limit3 = document.getElementById("Tcmin").value*100;
+		var limit4 = document.getElementById("Tcmax").value*100;	
+	    var limit5 = document.getElementById("Temmin").value;
+		var limit6 = document.getElementById("Temmax").value;
+	    var limit7 = document.getElementById("Hummin").value;
+		var limit8 = document.getElementById("Hummax").value;	
+	    var limit9 = document.getElementById("min").value*100;
+		var limit10 = document.getElementById("xmin").value*100;
+	    var limit11 = document.getElementById("xmax").value*100;
+		var limit12 = document.getElementById("max").value*100;	
+	    var limit13 = document.getElementById("Txcmin").value*100;
+		var limit14 = document.getElementById("Txcmax").value*100;								
+
+		claerlimit = createXmlRequest();
+		claerlimit.onreadystatechange = setdatlimit;
+		ajaxget(claerlimit, "/alllimit?a=" +limit1+"&b="+limit2 +"&c="+limit3 + "&d="+limit4+"&e="+limit5 +"&f="+limit6 + "&g="+limit7+"&h="+limit8 +"&i="+limit9 + "&j="+limit10+"&k="+limit11 + "&l="+limit12 +"&m="+limit13 + "&n="+limit14 +"&");				
+
+    }
+    function setdatlimit() {
+        if (claerlimit.readyState == 4) {
+            var sta = claerlimit.responseText;
+            if (sta == "OK") {
+                alert("请确认");
+            }
+            else {
+                alert("设置失败");
+            }
+        }
+    }	
+	
+</script>
+<style type="text/css">
+body,td,th,select,input {
+	font-family: Arial;
+}
+</style>
+</head>
+<body onload="pageload();">
+<fieldset>
+<legend>设置</legend>
+<table width="900" style="font-size:12px;">  
+	<tbody><tr id="ttr" style="display: none;">
+    <td width="133" style="width:120px;">校准功率值(W)</td>
+     	<td id="">
+   		 	<input id="act1" type="text" style="width:70px; text-align:center;">
+            <input id="act2" type="text" style="width:70px;  text-align:center;">
+            <input id="act3" type="text" style="width:70px; text-align:center;">
+    	</td>    
+    </tr>
+    <tr id="tr1" style="display: none;">
+        <td width="133" style="width:120px;">交流校准</td>
+        <td width="500"><input id="Button" type="button" value="Apply" onclick="set(2);">
+        <input id="value1" type="text" style="width:50px; position:relative; left:15px; text-align:center;"> 
+        （按F5刷新页面待对话框显示为2，再刷新两三遍，若校准功率值比1320W小于10，或大于1320W，则重新校准。
+        </td>
+    </tr>
+    <tr style="display:none;">
+        <td width="133" style="width:120px;">60°相位增益</td>
+        <td width="377"><input id="Button" type="button" value="Apply" onclick="set(3);">
+         <input id="value2" type="text" style="width:150px; position:relative; left:15px;">
+         （校准仪：相位设置为60
+        </td>     
+    </tr>
+	<tr id="tr2" style="display: none;">
+    	<td height="23" style="width:120px;">硬件识别:</td>
+    	<td id="acdc">D C</td>
+    </tr>
+     <tr><td><br></td></tr>
+	<tr id="tr3">
+    	<td height="23" style="width:120px;">单三相:</td>
+    	<td id=""><input id="line1" type="text" style="width:30px;">
+    	（1-单相，3-三相）</td>   
+    </tr> 
+	<tr id="tr4">
+    	<td height="23" style="width:120px;"><font color="#0033FF">多少块执行板:</font></td>
+    	<td id=""><input id="line2" type="text" style="width:30px;">
+    	</td>  
+    </tr>  
+	<tr id="tr8">
+    	<td height="23" style="width:120px;">每块板输出位数量:</td>
+    	<td id="">
+   		 	<input id="line8" type="text" style="width:30px;">
+            <input id="line9" type="text" style="width:30px;">
+            <input id="line10" type="text" style="width:30px;">
+    	</td>  
+    </tr>         
+	<tr id="tr6">
+    	<td height="23" style="width:120px;"><font color="#0033FF">回路数量:</font></td>
+    	<td id=""><input id="line4" type="text" style="width:30px;">
+    	（1-一个回路，2-两个回路，3-三个回路）</td>    
+    </tr>        
+	<tr id="tr7">
+    	<td height="23" style="width:120px;">每个回路输出位数量:</td>
+    	<td id="">
+   		 	<input id="line5" type="text" style="width:30px;">
+            <input id="line6" type="text" style="width:30px;">
+            <input id="line7" type="text" style="width:30px;">
+			<input id="cuit1" type="text" style="width: 30px; display: none;">
+			<input id="cuit2" type="text" style="width: 30px; display: none;">
+			<input id="cuit3" type="text" style="width: 30px; display: none;">
+    	</td>  
+    </tr>  
+    <tr id="tr5">
+      <td height="23" style="width:120px;"><font color="#0033FF">带不带断路器</font></td>
+        <td>
+          <input id="line3" type="text" style="width:30px;">
+          （0-不带断路器，1-带断路器）
+        </td>
+    </tr>        
+        
+     <tr><td><br></td></tr> 
+     <tr>
+      	<td height="23" style="width:120px;">垂直/水平</td>
+        <td>
+          <input id="VerticalLevel" type="text" style="width:30px;">
+          （0-垂直，1-水平）
+        </td>
+    </tr>      
+    <tr id="dis" style="display: none;">
+      <td height="23" style="width:120px;"><font color="#0033FF">水平显示</font></td>
+        <td>
+          <input id="level" type="text" style="width:30px;">
+          （0-默认，1-90度旋转，2-180度旋转，3-270度旋转）
+        </td>
+    </tr>  
+    <tr id="lcdsw" style="display: none;">
+      <td height="23" style="width:120px;">水平LCD新旧屏选择</td>
+        <td>
+          <input id="SwLcd" type="text" style="width:30px;">
+          （0-旧屏，1-新屏）
+        </td>
+    </tr>          
+     <tr>
+      	<td height="23" style="width:120px;"><font color="#0033FF">标准/中性</font></td>
+        <td>
+          <input id="neutral" type="text" style="width:30px;">
+          （0-标准，1-中性）
+        </td>
+    </tr>      
+     <tr>
+      	<td height="23" style="width:120px;">IN/OUT口级联方式</td>
+        <td>
+          <input id="serial" type="text" style="width:30px;">
+          （0-网络一带三，1-Mosbus）
+        </td>
+    </tr>     
+     <tr>
+      	<td height="23" style="width:120px;"><font color="#0033FF">带不带传感器盒子</font></td>
+        <td>
+          <input id="sensorbox" type="text" style="width:30px;">
+          （0-不带，1-带）
+        </td>
+    </tr>       
+     <tr>
+      	<td height="23" style="width:120px;">设备系列选择</td>
+        <td>
+          <input id="type" type="text" style="width:30px;">
+          （1-A系列，2-B系列，3-C系列，4-D系列）
+        </td>
+    </tr>        
+    <tr>
+      	<td height="23" style="width:120px;"><font color="#0033FF">语言选择</font></td>
+        <td>
+          <input id="language" type="text" style="width:30px;">
+          （0-英文，1为中文）
+        </td>
+    </tr> 
+	<tr>
+        <td style="width:120px;">MAC</td>
+        <td>
+        <input id="mac1" type="text" style="width:300px;">
+     	 </td>
+    </tr>
+	<tr>
+        <td style="width:120px;">保存</td>
+        <td width=""><input id="Button3" type="button" value="保存" onclick="set(1);"></td>
+    </tr>    
+    
+</tbody></table>
+</fieldset>
+<br>
+<fieldset>
+<legend>阈值统一设置</legend>
+<table width="900" style="font-size:12px;">  
+        <tbody><tr align="center">
+            <td id="A1" height="26px">1</td>
+            <td id="">总电压（V）</td>
+            <td><input id="Tvmin" type="text" style="width:60px; text-align:center; "></td>
+            <td></td>
+            <td></td>            
+            <td><input id="Tvmax" type="text" style="width:60px; text-align:center;"></td>
+        </tr>
+        <tr align="center" style="background-color:#F5F5F5;" "="">
+            <td id="B1" height="26px">2</td>
+            <td id="" height="22px">总电流（A）</td>
+            <td><input id="Tcmin" type="text" style="width:60px; text-align:center;"></td>
+            <td><input id="Txcmin" type="text" style="width:60px; text-align:center;"></td>
+            <td><input id="Txcmax" type="text" style="width:60px; text-align:center;"></td>            
+            <td><input id="Tcmax" type="text" style="width:60px; text-align:center;"></td>                   
+        </tr>  
+        <tr align="center">              
+            <td height="26px">3</td>
+            <td id="">温度（℃）</td>
+            <td><input id="Temmin" type="text" style="width:60px; text-align:center;"></td>
+            <td></td>
+            <td></td>            
+            <td><input id="Temmax" type="text" style="width:60px; text-align:center;"></td>
+        </tr>   
+        <tr align="center">              
+            <td height="26px">4</td>
+            <td id="">湿度（%）</td>
+            <td><input id="Hummin" type="text" style="width:60px; text-align:center;"></td>
+            <td></td>
+            <td></td>
+            <td><input id="Hummax" type="text" style="width:60px; text-align:center;"></td>           
+        </tr>  
+        <tr id="" align="center" onmouseout="moveout(this);" onmousemove="mov(this);">
+            <td height="26px">5</td>
+            <td id="">输出位电流（A）</td>
+            <td id=""><input id="min" type="text" style="width:60px; text-align:center;"></td>
+            <td id=""><input id="xmin" type="text" style="width:60px; text-align:center;"></td>
+            <td id=""><input id="xmax" type="text" style="width:60px; text-align:center;"></td>
+            <td id=""><input id="max" type="text" style="width:60px; text-align:center;"></td>
+            <td><input id="save" type="button" value="统一设置" onclick="setlimit();" style="width:70px;"> </td>
+        </tr>                          
+</tbody></table>
+</fieldset>
+
+
+
+
+
+<div class="scrollTop_top"></div></body></html>

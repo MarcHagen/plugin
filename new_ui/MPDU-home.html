@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0031)http://192.168.41.181/home.html -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>MPDU</title>
+<link href="./MPDU-home_files/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="./MPDU-home_files/jquery.min.js.下载"></script>
+<script type="text/javascript" src="./MPDU-home_files/my.js.下载"></script>
+<script type="text/javascript">
+	var flag;
+	var action;
+	var neutral;
+	window.onload = function ()
+	{
+		action=0;
+		loaddata();		
+		checkCookie();	
+		setInterval("loaddata();", 1500);
+	 };   
+		window.onresize = adjuest;
+		adjuest();
+		function adjuest(){
+		   if(action==1)
+		   {
+			   action=0;
+		  	   window.location.reload();
+		   }	   
+		}		
+		//清除所有cookie函数
+        function clearAllCookie() {
+                var date=new Date();
+                date.setTime(date.getTime()-10000);
+                var keys=document.cookie.match(/[^ =;]+(?=\=)/g);
+                console.log("username"+keys);
+                if (keys) {
+                    for (var i =  keys.length; i--;)
+                      document.cookie=keys[i]+"=0; expire="+date.toGMTString()+"; path=/";
+                }
+        }		
+	    //提取cookie中的值
+	    function getCookie(name) {
+		 var cookieStr = document.cookie;
+		 if(cookieStr.length > 0) {
+		 	var cookieArr = cookieStr.split(";"); //将cookie信息转换成数组
+		 	for (var i=0; i<cookieArr.length; i++) {
+		  		var cookieVal = cookieArr[i].split("="); //将每一组cookie(cookie名和值)也转换成数组
+		  		if(cookieVal[0] == name) {
+		  			return unescape(cookieVal[1]); //返回需要提取的cookie值
+		  		}
+		 	}
+		  }
+	    }		
+		function checkCookie() {
+		//	var cookieUser = document.getElementById("cookieUser");
+			var userName = getCookie("username");
+			if(userName) {
+				loaddata();	
+			}	
+			else{
+				clearAllCookie();
+				document.location.href = "/index.html";
+			}
+		}			
+		var xmlget;
+		function loaddata() {
+			xmlget = createXmlRequest();
+			xmlget.onreadystatechange = getdata;
+			ajaxget(xmlget, "/gethome");
+		}
+		function getdata()
+		{
+			if (xmlget.readyState == 4)
+			{
+				var sta = xmlget.responseText;
+				if (sta == "ERR") {
+					window.parent.location.href = "index.html";
+					return;
+				}				
+				var gv = new Array();
+				gv = sta.split("?");
+				flag = parseInt(gv[0]);
+				neutral = parseInt(gv[1]);
+				LangFun(flag);	
+				action=1;	
+				if(neutral != 1)
+				{
+					document.getElementById("picture").style.display = "";	
+					document.getElementById("p_lr").style.display = "";	
+				}
+			}
+		}
+		function LangFun(flag)
+		{
+			var lang_1 = ["Device State", "设备状态"];
+			var lang_2 = ["Settings", "设置"];
+			var lang_3 = ["Device", "设备"];
+			var lang_4 = ["Network ", "网络"];
+			var lang_5 = ["User ", "用户"];
+			var lang_6 = ["Logs", "日志"];
+			var lang_7 = ["System", "系统"];
+	
+			document.getElementById("lang_1").innerHTML = lang_1[flag];
+			document.getElementById("lang_2").innerHTML = lang_2[flag];
+			document.getElementById("lang_3").innerHTML = lang_3[flag];
+			document.getElementById("lang_4").innerHTML = lang_4[flag];
+			document.getElementById("lang_5").innerHTML = lang_5[flag];
+			document.getElementById("lang_6").innerHTML = lang_6[flag];
+			document.getElementById("lang_7").innerHTML = lang_7[flag];
+			
+		}	
+function clk(page)
+{	
+  	if(page==1)
+	{
+	     document.getElementById("rightMain").src="state.html";		
+	 }
+    else if (page == 2) 
+	{
+        document.getElementById("rightMain").src = "minmax.html";
+    }
+    else if (page == 3) {
+        document.getElementById("rightMain").src = "device.html";		
+    }
+    else if (page == 4) {
+        document.getElementById("rightMain").src = "net.html";	
+    }
+    else if (page == 5) {
+        document.getElementById("rightMain").src = "user.html"; 
+    }
+    else if (page == 6) {
+        document.getElementById("rightMain").src = "alarm.html";
+    }
+    else if (page == 7) {
+        document.getElementById("rightMain").src = "system.html"; 
+    }
+}
+/*
+function autoheight()
+{
+	document.getElementById("rightMain").style.width = document.body.clientWidth + "200px";
+	document.getElementById("rightMain").style.height = document.body.clientHeight - "500px";	
+}       */
+
+$(function(){
+	//setMenuHeight
+
+	$('.page').height($(window).height()-51-27-30);
+	$('.page iframe').width($(window).width()+5);	
+})  
+
+
+var xmllang;
+function setlanguage(order)
+{
+    xmllang = createXmlRequest();
+    xmllang.onreadystatechange = urllang;
+    ajaxget(xmllang,"/setlanguage?a=" + order + "&");
+}
+function urllang() {
+    if (xmllang.readyState > 0) {
+        var sta = xmllang.responseText;
+
+         window.location.reload();
+    }
+}
+
+
+</script>
+
+</head>
+
+<body>
+<div id="wrap">
+	<div id="header">
+<div id="picture" style="border: 1px solid #ffffff; position:absolute; top: 5px; height: 38px; left: 90px; display:none;"><img src="./MPDU-home_files/logo.png" width="38" height="38/"></div>
+<div style="position: absolute; left: 140px; top: 10px; height: 20px; width: 145px;"><span style="font-family:Arial; font-size:30px;color:#ffffff;">MPDU</span></div>    
+    <div class="logo fleft"></div>
+    <div class="nav fleft">
+    	<ul>
+        	<div class="nav-left fleft"></div>
+            <li onclick="clk(1)" class="first"><a href="http://192.168.41.181/state.html" target="right" id="lang_1" style="font-family:Arial; color:#ffffff; ">设备状态</a></li>
+        	<li onclick="clk(2)"><a href="http://192.168.41.181/minmax.html" target="right" id="lang_2" style="font-family:Arial; color:#ffffff; ">设置</a></li>
+            <li onclick="clk(3)"><a href="http://192.168.41.181/device.html" target="right" id="lang_3" style="font-family:Arial; color:#ffffff; ">设备</a></li>
+            <li onclick="clk(4)"><a href="http://192.168.41.181/net.html" target="right" id="lang_4" style="font-family:Arial; color:#ffffff; ">网络</a></li>
+            <li onclick="clk(5)"><a href="http://192.168.41.181/user.html" target="right" id="lang_5" style="font-family:Arial; color:#ffffff; ">用户</a></li>
+            <li onclick="clk(6)"><a href="http://192.168.41.181/alarm.html" target="right" id="lang_6" style="font-family:Arial; color:#ffffff; ">日志</a></li>
+            <li onclick="clk(7)"><a href="http://192.168.41.181/system.html" target="right" id="lang_7" style="font-family:Arial; color:#ffffff; ">系统</a></li>
+            <div class="nav-right fleft"></div>
+        </ul>
+    </div>
+     <a class="change fright" onclick="setlanguage(0)">English </a><a class="changeen fright" onclick="setlanguage(1)"> 中文</a>    
+   <a class="logout fright" href="http://192.168.41.181/index.html"> </a>
+    <div class="clear"></div>
+    <div class="subnav">
+    	<div class="subnavLeft fleft"></div>
+        <div class="fleft"></div>
+        <div class="subnavRight fright"></div>
+    </div>
+    </div><!--#header -->
+    <div id="content">
+    <div class="space"></div>
+
+    <div class="page" style="height: 622px;">
+    <iframe width="100%" scrolling="auto" height="100%" frameborder="false" allowtransparency="true" style="border: medium none; margin-left: 5px; width: 1651px;" src="./MPDU-home_files/state.html" id="rightMain" name="right"></iframe>
+    </div>
+    </div><!--#content -->
+    <div class="clear"></div>
+    <div id="footer"><p id="p_lr" align="center" style="display:none;"><a href="http://www.china-clever.com/" target="_blank">Copyright© Shenzhen Clever Electronic Co.,LTD All rights reserved.</a></p></div><!--#footer -->
+</div><!--#wrap -->
+<div style="text-align:center;">
+</div>
+
+
+<div class="scrollTop_top"></div></body></html>

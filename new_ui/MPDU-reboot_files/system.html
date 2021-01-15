@@ -1,0 +1,119 @@
+
+<!-- saved from url=(0033)http://192.168.41.181/system.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>system</title>
+<link href="./style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="./my.js.下载"></script>
+<script type="text/javascript">
+	var flag;
+    function pageload() {
+        loaddata();
+    }
+    var xmlget;
+    function loaddata() {
+        xmlget = createXmlRequest();
+        xmlget.onreadystatechange = getdata;
+        ajaxget(xmlget, "/getsys");
+    }
+    function getdata()
+	{
+        if (xmlget.readyState == 4)
+		{
+            var sta = xmlget.responseText;
+            var gv = new Array();
+            gv = sta.split("?");
+			flag = parseInt(gv[0]);
+			var adm_user = parseInt(gv[1]);     //权限
+			LangFun(flag);
+			if(adm_user==1)   //用户权限
+			{
+				document.getElementById("lang_5").style.display = "none";
+			}							
+		}
+	}
+	function LangFun(flag)
+	{
+		var lang_1 = ["System", "系统"];
+		var lang_2 = ["Select Activity:", "选择命令"];
+		var lang_3 = ["Restart", "重启"];
+		var lang_4 = ["Restore To Default Settings", "恢复出厂设置"];
+		var lang_5 = ["Save", "保存"];
+		var lang_6 = ["System Settings", "系统设置"];	
+		var lang_7 = ["System", "系统"];	
+
+		document.getElementById("lang_1").innerHTML = lang_1[flag];
+		document.getElementById("lang_2").innerHTML = lang_2[flag];
+		document.getElementById("lang_3").innerHTML = lang_3[flag];
+		document.getElementById("lang_4").innerHTML = lang_4[flag];
+		document.getElementById("lang_5").value = lang_5[flag];
+		document.getElementById("biao1").innerHTML = lang_6[flag];
+		document.getElementById("titlebar").innerHTML = lang_7[flag];
+	}		
+		
+    var xmlset;
+    function setdevice() 
+    {
+        var order = document.getElementById("order").value;
+		if(flag)
+		{
+			if(confirm("你确定要执行?")) 
+			{
+				xmlset = createXmlRequest();
+				xmlset.onreadystatechange = setdata;
+				ajaxget(xmlset, "/setsys?a=" + order + "&");
+			}			
+		}
+		else
+		{
+			if(confirm("Do you want to continue?")) 
+			{
+				xmlset = createXmlRequest();
+				xmlset.onreadystatechange = setdata;
+				ajaxget(xmlset, "/setsys?a=" + order + "&");
+			}			
+			
+		}		
+    }
+    function setdata() {
+            setInterval("relogin();", 3000);
+    }
+    function relogin() {
+        window.parent.location.href="index.html";
+    }		
+</script>
+
+</head>
+
+<body onload="pageload();">
+<div class="title_menu fleft">
+<div class="menu ">
+  		<ul> 	
+         <li class="subMenuTitle"><p id="titlebar" style="position:absolute; left:45px; font-family:Arial;">系统</p></li>
+         <li class="subMenu"><a href="http://192.168.41.181/system.html" target="right" id="biao1" style="font-family:Arial; ">系统设置</a></li>   
+        </ul>  
+    </div>  <!--#menu fleft --> 
+    </div>
+<div class="pageColumn">
+<div class="userinto">
+<table class="kuang">
+        <tbody><tr style="color:#FFFFFF; background:#198bc9;">
+           <td height="22px"><p style="position:relative; left:20px; font-family:Arial; font-size:14px; " id="lang_1">系统</p></td>
+            <td></td>
+        </tr> 
+<tr>
+</tr><tr><td><br></td><td></td></tr>
+<tr><td><p id="lang_2" style="position:relative; left:20px; font-size:13px;">选择命令</p></td>
+<td><select id="order" style="position:relative; left:50px; font-family:Arial; font-size:13px;">
+<option value="0" id="lang_3">重启</option>
+<option value="1" id="lang_4">恢复出厂设置</option>
+</select></td>
+</tr>
+<tr><td><br></td><td></td></tr>
+<tr><td><input id="lang_5" type="button" onclick="setdevice();" style=" width:45px; position:relative; left:20px; font-family:Arial; font-size:13px;" value="保存"></td><td></td></tr>
+</tbody></table>
+</div>
+</div>
+
+
+</body></html>

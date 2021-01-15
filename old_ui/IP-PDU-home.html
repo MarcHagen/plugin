@@ -1,0 +1,260 @@
+
+<!-- saved from url=(0031)http://192.168.25.129/home.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=GBK">
+
+<title>IP-PDU</title>
+<script type="text/javascript" src="./IP-PDU-home_files/my.js.下载"></script>
+<script language="javascript">
+
+	window.onload = function ()
+	{
+	              
+	 };                       
+	
+	 function dis_play(order)
+	 {
+			for(i=0;i<8;i++)
+			{
+				document.getElementById("set_div"+(i+1)).style.background = "#F5F5F5";   //区域框灰色
+				document.getElementById("test"+(i+1)).style.color = "#0054A8";             //区域框内文字蓝色
+				document.getElementById("divFly"+(i+1)).style.display = "none";  // 图形不显示
+			}
+			for(j=0;j<7;j++)
+			{
+				document.getElementById("line"+(j+2)).style.display = "block";  //下划线显示 id2-8
+			}	
+			document.getElementById("set_div"+order).style.background = "#0054A8";  //显示对应区域框颜色
+			document.getElementById("test"+order).style.color = "#ffffff";         //显示对应框内文字颜色		
+			document.getElementById("divFly"+order).style.display = "block";  //显示	对应区域框内的图形
+			if(order>1)
+			{
+				document.getElementById("line"+order).style.display = "none";        //隐藏对应框内的横线	
+			}
+	 }	
+	      
+        
+function clk(page)
+{	
+	var i;
+	var j;
+  	if(page==1)
+	{
+	     document.getElementById("ifrm").src="status.html";
+		 dis_play(page);	
+ 
+	 }
+    else if (page == 2) 
+	{
+        document.getElementById("ifrm").src = "minmax.html";
+		dis_play(page);
+    }
+    else if (page == 3) {
+        document.getElementById("ifrm").src = "device.html";
+		dis_play(page);		
+    }
+    else if (page == 4) {
+        document.getElementById("ifrm").src = "user.html";
+		dis_play(page);	
+		
+    }
+    else if (page == 5) {
+        document.getElementById("ifrm").src = "net.html";
+		dis_play(page);	 
+    }
+    else if (page == 6) {
+        document.getElementById("ifrm").src = "snmp.html";
+		dis_play(page);
+    }
+    else if (page == 7) {
+        document.getElementById("ifrm").src = "smtp.html";
+		dis_play(page);
+    }
+    else if (page == 8) {
+        document.getElementById("ifrm").src = "system.html";
+		dis_play(page);
+    }
+}
+function mov(obj)
+{
+   obj.style.background="#B0C4DE";
+ }
+function movout(obj)
+{
+   obj.style.background="#F5F5F5";
+ }
+ function moveout(obj)
+ {
+	 obj.style.background="#0054A8";
+ }
+ 
+function setEffect(link_id){
+	var i;
+	for(i=0;i<link.length;i++)
+	{
+		if(i != link_id)
+		{
+			link[i].className = "sec1";
+		
+		}
+		else
+		{
+			link[i].className = "sec2";
+			
+		} 
+	 }
+ 	 
+} 
+  var xmllang;
+function setlanguage(order)
+{
+    xmllang = createXmlRequest();
+    xmllang.onreadystatechange = urllang;
+    ajaxget(xmllang,"/setlanguage?a=" + order + "&");
+}
+function urllang() {
+    if (xmllang.readyState > 0) {
+        var sta = xmllang.responseText;
+
+         window.location.reload();
+    }
+}
+
+</script>
+<style type="text/css">
+<!--
+.title{
+	position:absolute;
+	left:51px;
+	top:15px;
+	font-family:Arial;
+	font-size:13px;
+	color:#FFFFFF;
+	width: 60px;
+	text-align:left;
+}
+.menu {
+	position:absolute;
+	left:50px;
+	top:17px;
+	font-family:Arial;
+	font-size:13px;
+	color:#0054A8;
+	width: 60px;
+	text-align:left;
+}
+-->
+</style>
+<style>
+.divcss5{ border:1px dashed #000; height:50px; width:350px}
+.divcss5-1{border-left:1px dashed #000; height:50px;width:350px}
+.divcss5-2{border-right:1px dashed #000; height:50px;width:350px}
+.divcss5-3{border-top:1px dashed #000; height:50px;width:10px}
+.divcss5-4{border-bottom:1px dashed #000; height:40px;width:182px}
+.divcss5-5{border:1px dashed #000; border-right:0;height:50px;width:350px}
+/* www.divcss5.com实例 */
+</style>
+
+
+</head>
+<body style="margin:0px; font-size:12px;"><div align="center" style="height:auto;">
+<div align="center" style="width: 950px; height:60px; background-color:#0054A8;">
+  <div align="center" style=" position:relative; width: 921px; height:50px; left: -2px; top: 7px;">
+    <div align="center" style=" position:absolute; width: 149px; height:1px; left: 6px; top: 5px;">
+      <div style="border: 1px solid #ffffff; position: absolute; top: 0px; height: 37px; left: 2px; width: 37px;"><img src="./IP-PDU-home_files/logo.png" width="37" height="37/"></div>
+      <div style="position: absolute; left: 27px; top: 16px; height: 20px; width: 145px;"><a href="http://192.168.25.129/home.html#" style="font-family:Arial;font-size:24px;color:#ffffff;">IP-PDU</a></div>
+    </div>
+    <div style="position:absolute; cursor:pointer; left:781px; top:1px; height: 20px; width: 171px; font-family:Arial; font-size:18px; color:#FFFFFF"><a onclick="setlanguage(1);">English </a>|<a onclick="setlanguage(2);"> 中文</a></div>
+    <div align="center" style="position:absolute; width: 176px; height:18px; left: 779px; top: 27px;"> <span style="font-family:Arial; font-size:12px;color:#FFF;">版本:1.5.9</span></div>
+  </div>
+</div>
+<hr style="border-style:solid; border-width:0px;width: 950px; height:5px; background-color:#0054A8;">
+<div align="center" style="border-bottom-style:none; width: 950px; height:450px;">
+<div style="position:relative; width:950px; height:450px; left: 0px; top: 0px;">
+
+
+      <!-- 设备状态 (文本框) -->
+      <div id="set_div1" style="position:absolute; width: 182px; height:40px; left: 0px; top:22px; background-color:#0054A8;" onclick="  clk(1);  ">
+        <span class="title" id="test1">
+        设备状态 </span>
+ 		<div id="divFly1" style="position:absolute; width:20px; height:20px; left:160px; top:13px;">
+        <img class="img " src="./IP-PDU-home_files/u117.png">
+        </div>	
+      </div>
+      
+      <!-- 阈值设置 (文本框) -->
+      <div id="set_div2" style="position:absolute; width: 182px; height:40px; left: 0px; top:62px; background-color:#f2f2f2;" onclick="  clk(2);">
+       <span class="menu" id="test2"> 阈值设置 </span> 	
+ 		<div id="divFly2" style="position:absolute; width:20px; height:20px; left:160px; top:13px; display:none;">
+        <img class="img " src="./IP-PDU-home_files/u117.png">
+        </div>
+		<hr id="line2" style="position:absolute; width:80%; top:-7px; left:18px; border:1px solid #B0C4DE">             
+      </div>
+      
+      <!-- 设备设置 (文本框) -->
+      <div id="set_div3" style="position:absolute; width: 182px; height:40px; left: 0px; top:102px; background-color:#f2f2f2;" onclick=" clk(3); ">
+       <span class="menu" id="test3">设备设置</span>   
+ 		<div id="divFly3" style="position:absolute; width:20px; height:20px; left:160px; top:13px; display:none;">
+        <img class="img " src="./IP-PDU-home_files/u117.png">
+        </div>	
+		<hr id="line3" style="position:absolute; width:80%; top:-7px; left:18px; border:1px solid #B0C4DE">       
+      </div>
+      
+      <!-- 用户设置 (文本框) -->
+      <div id="set_div4" style="position:absolute; width: 182px; height:40px; left: 0px; top:142px; background-color:#f2f2f2;" onclick=" clk(4);  ">
+       <span class="menu" id="test4">用户设置</span>
+ 		<div id="divFly4" style="position:absolute; width:20px; height:20px; left:160px; top:13px; display:none;">
+        <img class="img " src="./IP-PDU-home_files/u117.png">
+        </div>	    
+		<hr id="line4" style="position:absolute; width:80%; top:-7px; left:18px; border:1px solid #B0C4DE">      
+      </div>
+      
+      <!-- 网络设置 (文本框) -->
+      <div id="set_div5" style="position:absolute;width: 182px; height:40px; left: 0px; top:182px; background-color:#f2f2f2;" onclick=" clk(5); ">
+       <span class="menu" id="test5">网络设置</span>
+ 		<div id="divFly5" style="position:absolute; width:20px; height:20px; left:160px; top:13px; display:none;">
+        <img class="img " src="./IP-PDU-home_files/u117.png">
+        </div> 		      
+		<hr id="line5" style="position:absolute; width:80%; top:-7px; left:18px; border:1px solid #B0C4DE">         
+      </div>
+      
+      <!-- SNMP/Telnet (文本框) -->
+      <div id="set_div6" style="position:absolute; width: 182px; height:40px; left: 0px; top:222px; background-color:#f2f2f2;" onclick=" clk(6); ">
+       <span class="menu" id="test6">SNMP/Telnet</span>   
+ 		<div id="divFly6" style="position:absolute; width:20px; height:20px; left:160px; top:13px; display:none;">
+        <img class="img " src="./IP-PDU-home_files/u117.png">
+        </div>	     
+		<hr id="line6" style="position:absolute; width:80%; top:-7px; left:18px; border:1px solid #B0C4DE">       
+      </div>
+      
+      <!-- 邮箱设置 (文本框) -->
+      <div id="set_div7" style="position:absolute; width: 182px; height:40px; left: 0px; top:262px; background-color:#f2f2f2;" onclick=" clk(7); ">
+      <span class="menu" id="test7">邮箱设置</span>    
+ 		<div id="divFly7" style="position:absolute; width:20px; height:20px; left:160px; top:13px; display:none;">
+        <img class="img " src="./IP-PDU-home_files/u117.png">
+        </div>	     
+		<hr id="line7" style="position:absolute; width:80%; top:-7px; left:18px; border:1px solid #B0C4DE">        
+      </div> 
+           
+      <!-- 重启 (文本框) -->
+      <div id="set_div8" style="position:absolute; width: 182px; height:40px; left: 0px; top:302px; background-color:#f2f2f2;" onclick=" clk(8); ">
+       <span class="menu" id="test8">重启
+       </span>       
+ 		<div id="divFly8" style="position:absolute; width:20px; height:20px; left:160px; top:13px; display:none;">
+        <img class="img " src="./IP-PDU-home_files/u117.png">
+        </div>	       
+		<hr id="line8" style="position:absolute; width:80%; top:-7px; left:18px; border:1px solid #B0C4DE">              
+      </div>     
+      
+      
+    
+
+<div style="position:absolute; left: 230px; width: 720px; top: 0px; height: 450px;">
+  <iframe id="ifrm" frameborder="no" border="0" width="100%" height="450" src="./IP-PDU-home_files/status.html" scrolling="auto"></iframe>
+</div>
+</div>
+</div>
+<hr style="border-style:dotted; border-width:1px; font-size: 13px; font-family: Arial; border-color: #0054A8; width: 950px; height:1px; background-color:#0054A8;">
+深圳市克莱沃电子有限公司
+</div>
+
+</body></html>

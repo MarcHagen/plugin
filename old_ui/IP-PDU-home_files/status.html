@@ -1,0 +1,295 @@
+
+<!-- saved from url=(0033)http://192.168.25.129/status.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>status</title>
+<style>
+html{overflow-x:hidden;}
+    .style1
+    {
+        height: 60px;
+        width: 79px;
+    }
+</style>
+<script type="text/javascript" src="./my.js.下载"></script>
+<script type="text/javascript">
+	var LineNum;
+	var intput;
+	var modbusF;
+    function pageload() {
+        loaddata();
+        setInterval("loaddata();", 5000);
+    }
+    var xmlget;
+    function loaddata() {
+        intput = document.getElementById("put").value;
+        var slave = document.getElementById("slave").value;
+        var url = "/getstatus?a=" + slave + "&b=" + intput+"&";
+        xmlget = createXmlRequest();
+        xmlget.onreadystatechange = urldata;
+        ajaxget(xmlget, url);
+    }
+    function urldata() {
+        if (xmlget.readyState == 4) {
+            var sta = xmlget.responseText;
+            if (sta == "ERR") {
+                window.parent.location.href = "index.html";
+                return;
+            }
+            if (sta == null)
+                return;
+            var gv = new Array();
+            gv = sta.split("?");
+			LineNum = parseInt(gv[5]);
+			modbusF = parseInt(gv[6]);
+			if(modbusF==1)
+			{
+				document.getElementById("slave").style.display = "none";
+				document.getElementById("pdu").style.display = "none";
+			}
+			else
+			{
+				document.getElementById("slave").style.display = "";
+				document.getElementById("pdu").style.display = "";				
+			}
+	    	if(parseFloat(gv[13])>0)
+			{
+            	document.getElementById("ac_dc").innerHTML = "AC";
+			}
+			else
+			{
+				document.getElementById("ac_dc").innerHTML = "DC";
+			}				
+            if (parseInt(gv[8]) == 0) {
+                document.getElementById("c1").innerHTML = "Null";
+                document.getElementById("c2").innerHTML = "Null";
+                document.getElementById("v1").innerHTML = "Null";
+                document.getElementById("v2").innerHTML = "Null";
+                document.getElementById("p1").innerHTML = "Null";
+                document.getElementById("p2").innerHTML = "Null";
+                document.getElementById("e1").innerHTML = "Null";
+                document.getElementById("e2").innerHTML = "Null";
+				document.getElementById("tem").innerHTML = "Null";
+                document.getElementById("hum").innerHTML = "Null";
+                return;
+            }
+            if (LineNum >1) {
+				document.getElementById("put").style.display = "";
+                document.getElementById("line1").style.display = "none";
+				if(LineNum==2)
+				{
+					document.getElementById("lin2").innerHTML = "Circuit 1";
+					document.getElementById("lin3").innerHTML = "Circuit 2";
+				}
+				else
+				{
+					document.getElementById("lin2").innerHTML = "Line 2";
+					document.getElementById("lin3").innerHTML = "Line 3";
+				}
+            }
+            else {
+                document.getElementById("put").style.display = "none";
+                document.getElementById("line1").style.display = "";
+            }
+            document.getElementById("c1").innerHTML = parseFloat(gv[0]) / 10;
+            document.getElementById("c2").innerHTML = parseFloat(gv[0]) / 10;
+            document.getElementById("v1").innerHTML = gv[1];
+            document.getElementById("v2").innerHTML = gv[1];
+            document.getElementById("p1").innerHTML = (parseFloat(gv[14])/1000).toFixed(2);
+            document.getElementById("p2").innerHTML = (parseFloat(gv[14])/1000).toFixed(2);
+            document.getElementById("e1").innerHTML = parseFloat(gv[2]) / 10;
+            document.getElementById("e2").innerHTML = parseFloat(gv[2]) / 10;
+			document.getElementById("tem").innerHTML = gv[9];
+            document.getElementById("hum").innerHTML = gv[10];
+            if (parseInt(gv[3]) >0) {
+                document.getElementById("c1").style.color = "#FF0000";
+                document.getElementById("c2").style.color = "#FF0000";
+            }
+            else {
+                document.getElementById("c1").style.color = "#000000";
+                document.getElementById("c2").style.color = "#000000";
+            }
+            if (parseInt(gv[4]) >0) {
+                document.getElementById("v1").style.color = "#FF0000";
+                document.getElementById("v2").style.color = "#FF0000";
+            }
+            else {
+                document.getElementById("v1").style.color = "#000000";
+                document.getElementById("v2").style.color = "#000000";
+            }
+			if(parseInt(gv[11]) >0)
+			{
+				document.getElementById("tem").style.color = "#FF0000";
+			}
+			else
+			{
+				document.getElementById("tem").style.color = "#000000";
+			}
+			if(parseInt(gv[12]) >0)
+			{
+                document.getElementById("hum").style.color = "#FF0000";
+			}
+			else
+			{
+                document.getElementById("hum").style.color = "#000000";
+			}
+			changeLine();			
+        }
+    }
+	function changeLine() 
+	{
+        if (intput == "0") {
+            document.getElementById("page").innerHTML = "L1";
+            document.getElementById("name1").innerHTML = "Line 1 电流";
+            document.getElementById("name2").innerHTML = "Line 1 电压";
+            document.getElementById("name3").innerHTML = "Line 1 功率";
+            document.getElementById("name4").innerHTML = "Line 1 电能";
+        }
+        else if (intput == "1") {
+			if(LineNum==2)
+			{
+				document.getElementById("page").innerHTML = "C1";
+				document.getElementById("name1").innerHTML = "Circuit 1 电流";
+				document.getElementById("name2").innerHTML = "Circuit 1 电压";
+				document.getElementById("name3").innerHTML = "Circuit 1 功率";
+				document.getElementById("name4").innerHTML = "Circuit 1 电能";				
+			}
+			else
+			{
+				document.getElementById("page").innerHTML = "L2";
+				document.getElementById("name1").innerHTML = "Line 2 电流";
+				document.getElementById("name2").innerHTML = "Line 2 电压";
+				document.getElementById("name3").innerHTML = "Line 2 功率";
+				document.getElementById("name4").innerHTML = "Line 2 电能";				
+			}
+        }
+        else if (intput == "2") {
+			if(LineNum==2)
+			{
+				document.getElementById("page").innerHTML = "C2";
+				document.getElementById("name1").innerHTML = "Circuit 2 电流";
+				document.getElementById("name2").innerHTML = "Circuit 2 电压";
+				document.getElementById("name3").innerHTML = "Circuit 2 功率";
+				document.getElementById("name4").innerHTML = "Circuit 2 电能";				
+			}
+			else
+			{
+				document.getElementById("page").innerHTML = "L3";
+				document.getElementById("name1").innerHTML = "Line 3 电流";
+				document.getElementById("name2").innerHTML = "Line 3 电压";
+				document.getElementById("name3").innerHTML = "Line 3 功率";
+				document.getElementById("name4").innerHTML = "Line 3 电能";				
+			}			
+        }		
+	}
+</script>
+</head>
+<body onload="pageload();" style="margin:0px; overflow-x :hidden;">
+<br>
+<span style="font-size:16px;font-family:Arial;"><b>设备信息</b></span><br>
+<table>
+<tbody><tr>
+<td width="250" style="width:250px;font-size:14px; font-family:Arial;">
+<span id="pdu">PDU:</span>
+<select id="slave" onchange="loaddata();">
+<option value="0" selected="">主机</option>
+<option value="1">副机1</option>
+<option value="2">副机2</option>
+<option value="3">副机3</option>
+<option value="4">副机4</option>
+</select>
+<br><br>
+<span>输出 :</span>
+<span id="ac_dc">AC</span><br>
+<br> 
+<span>输出:</span>
+<select id="put" onchange="loaddata();" style="display: none;">
+<option value="0" selected="">Line 1</option>
+<option value="1" id="lin2"></option>
+<option value="2" id="lin3"></option>
+</select><span id="line1" style="font-size: 14px;">Line1</span>
+</td>
+<td width="1">&nbsp;</td>
+<td width="1">&nbsp;</td>
+<td width="1">&nbsp;</td>
+<td width="1">&nbsp;</td>
+<td width="1">&nbsp;</td>
+<td width="224">
+    <div style="position:relative; top: 0px; left: 0px;">
+        <div style="position:relative;left:0px; width:220px; height:160; border-style:solid; border-width:2px;border-color:#0054A8;">
+            <table width="220" style="font-size:12px;">
+                <tbody><tr>
+                    <td align="center" class="style1"><span id="page" style="font-family:Arial; font-size:32px;">L1</span></td>
+                    <td align="right" style="height:50px;" nowrap=""><span id="c1" style="font-family: Arial; font-size: 48px; color: rgb(0, 0, 0);">5.3</span>
+                    <span style="font-family:Arial; font-size:32px;">A</span></td>
+                </tr>
+                <tr>
+                    <td align="right" class="style1"><span id="v1" style="font-family: Arial; font-size: 32px; color: rgb(0, 0, 0);">230</span>
+                    <span style="font-family:Arial; font-size:18px;">V</span></td>
+                    <td align="right"><span id="p1" style="font-family:Arial; font-size:32px;">1.22</span>
+                    <span style="font-family:Arial; font-size:18px;">kW</span></td>
+                </tr>
+                <tr>
+                    <td align="right" colspan="2" style="height:40px;"><span id="e1" style="font-family:Arial; font-size:32px;">2760.4</span>
+                    <span style="font-family:Arial; font-size:18px;">kWh</span></td>
+                </tr>
+             </tbody></table>
+        </div>
+    </div>
+</td>
+
+</tr>
+</tbody></table>
+
+
+<br>
+
+<div id="Div2" style="width:700px; height:auto; border-style:solid; border-width:1px;border-color:#aaaaff;">
+        <table width="700" style="font-size:13px; font-family:Arial;">
+            <tbody><tr align="center" style="color:#FFFFFF;background:#0054A8;">
+                <td height="22px">编号</td>
+                <td>名称</td>
+                <td>状态</td>
+                <td>单位</td>
+            </tr>
+            <tr align="center">
+                <td height="22px">1</td>
+                <td id="name1">Line 1 电流</td>
+                <td id="c2" style="color: rgb(0, 0, 0);">5.3</td>
+                <td>A</td>
+            </tr>
+            <tr align="center" style="background-color:#F5F5F5;">
+                <td height="22px">2</td>
+                <td id="name2">Line 1 电压</td>
+                <td id="v2" style="color: rgb(0, 0, 0);">230</td>
+                <td>V</td>
+            </tr>
+            <tr align="center">
+                <td height="22px">3</td>
+                <td id="name3">Line 1 功率</td>
+                <td id="p2">1.22</td>
+                <td>kW</td>
+            </tr>
+            <tr align="center" style="background-color:#F5F5F5;">
+                <td height="22px">4</td>
+                <td id="name4">Line 1 电能</td>
+                <td id="e2">2760.4</td>
+                <td>kWh</td>
+            </tr>
+            <tr align="center">
+                <td height="22px">5</td>
+                <td id="name5">温度</td>
+                <td id="tem" style="color: rgb(0, 0, 0);">0</td>
+                <td>℃</td>
+            </tr>
+            <tr align="center" style="background-color:#F5F5F5;">
+                <td height="22px">6</td>
+                <td id="name6">湿度</td>
+                <td id="hum" style="color: rgb(0, 0, 0);">0</td>
+                <td>%</td>
+            </tr>
+        </tbody></table>
+</div>
+
+
+</body></html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0022)http://192.168.41.181/ -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>MPDU</title>
+<link href="./MPDU_files/style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="./MPDU_files/my.js.下载"></script>
+<script type="text/javascript">
+	var flag;
+	var neutral;
+    function pageload() { 	         
+        loaddata();
+    }
+    var xmlget;
+    function loaddata() {
+        xmlget = createXmlRequest();
+        xmlget.onreadystatechange = getdata;
+        ajaxget(xmlget, "/getlogo");
+    }
+    function getdata()
+	{
+        if (xmlget.readyState == 4)
+		{
+            var sta = xmlget.responseText;
+            var gv = new Array();
+            gv = sta.split("?");
+			flag = parseInt(gv[0]);
+			neutral = parseInt(gv[1]);
+			LangFun(flag);							
+		}
+	}
+	function LangFun(flag)
+	{
+		var lang_1 = ["Welcome To CLEVER MPDU", "欢迎使用CLEVER MPDU"];
+		var lang_5 = ["Welcome To MPDU", "欢迎使用 MPDU"];
+		var lang_2 = ["Username:", "账号:"];
+		var lang_3 = ["Password:", "密码:"];
+		var lang_4 = ["Login", "登录"];
+
+		if(neutral==1)
+		{
+			document.getElementById("lang_1").innerHTML = lang_5[flag];
+		}
+		else
+		{
+			document.getElementById("lang_1").innerHTML = lang_1[flag];
+		}		
+		document.getElementById("lang_2").innerHTML = lang_2[flag];
+		document.getElementById("lang_3").innerHTML = lang_3[flag];
+		document.getElementById("lang_4").value = lang_4[flag];
+	}
+	
+function keydm() {
+    if (event.keyCode == 13) {
+        login();
+    }
+}	
+
+var xmlHttp;
+var username;
+var password;
+function login()
+{
+    var nm = document.getElementById("name").value;
+    var psd = document.getElementById("psd").value;
+    xmlHttp = createXmlRequest();
+    xmlHttp.onreadystatechange = urldata;
+    ajaxget(xmlHttp,"/setlogin?a=" + nm + "&b=" + psd + "&");
+}
+// 保存Cookie
+ function SetCookie(username, password) {
+	 var Then = new Date();
+	 Then.setTime(Then.getTime() + +1*60*1000);  //设置有效时间为1分钟
+	 document.cookie += ("username=" + username + "%%" + password + ";expires=" + Then.toGMTString());
+ }
+function urldata() {
+    if (xmlHttp.readyState == 4) {
+        var sta = xmlHttp.responseText;
+        if (sta == "OK") {
+			SetCookie(username, password);
+            document.location.href = "/home.html";
+        }
+        else 
+		{
+			if(flag==0)
+			{
+				alert("Login fail!");
+			}
+			else
+			{
+				alert("登陆失败!");
+			}
+            SetCookie("", "");
+        }
+    }
+}	
+
+</script>
+</head>
+
+<body onload="pageload();" onkeydown="keydm();">
+<div id="wrap_in">
+    <div id="content-wrap">
+    <div class="spa"> 
+    <div class="cont"> <span id="lang_1">欢迎使用 MPDU</span></div>
+	<div class="field"><label id="lang_2" style=" position:relative; left:-5px;">账号:</label><input id="name" name="" type="text"></div>
+	<div class="field"><label id="lang_3" style=" position:relative; left:-5px;">密码:</label><input id="psd" name="" type="password"><br></div>
+    <div class="btn"><input name="" id="lang_4" type="button" class="login-btn" value="登录" onclick="login();"></div>
+ 	</div> 
+    </div>
+</div>
+
+
+<div class="scrollTop_top"></div></body></html>

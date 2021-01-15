@@ -1,0 +1,1169 @@
+
+<!-- saved from url=(0032)http://192.168.41.181/state.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>total state</title>
+<link href="./style.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="./my.js.下载"></script>
+<script type="text/javascript">
+	var flag;
+	var outputN;
+	var circuit;
+	var LineNUM;
+    function pageload() {		
+        loaddata();
+        setInterval("loaddata();", 3000);
+    }
+    var xmlget;
+    function loaddata() 
+	{		
+        xmlget = createXmlRequest();
+        xmlget.onreadystatechange = urldata;
+		ajaxget(xmlget, "/getstatus");
+    }
+    function urldata() {
+        if (xmlget.readyState == 4) {
+            var sta = xmlget.responseText;
+            var gv = new Array();
+            gv = sta.split("?");
+            var type = parseInt(gv[1]);        
+			var LineNUM = parseInt(gv[2]);        
+			circuit = parseInt(gv[3]);     
+			flag = parseInt(gv[4]);  
+			var address = parseInt(gv[5]);
+			outputN = parseInt(gv[6]);
+			var OnLine = parseInt(gv[7]);
+			document.getElementById("ser_addr").innerHTML = address;
+			document.getElementById("slave").value = gv[338];
+			LangFun(flag);	
+			document.getElementById("Version_1").innerHTML = gv[0];
+			if(circuit==1)	
+			{
+				for(var i=0;i<2;i++)
+				{
+					document.getElementById("l"+ (i + 2)).style.display = "none";	
+				}					
+			}
+			else if(circuit==2)	
+			{
+				document.getElementById("Li2").innerHTML = "C 1";
+				document.getElementById("Li3").innerHTML = "C 2";
+			}		 
+			for(var i=0;i<outputN;i++)
+			{
+				document.getElementById("tr"+(i+1)).style.display = "";
+				document.getElementById("output"+(i+1)).innerHTML = gv[340+i];
+			}	
+			var serial = parseInt(gv[339]);	
+			if(serial==1)
+			{
+				document.getElementById("serial").style.display = "none";	
+				if(flag==1)document.getElementById("ser_addr").innerHTML = "副机"
+				else document.getElementById("ser_addr").innerHTML = "Slave "					
+			}
+			else
+			{
+				if(address==0)  //主副机
+				{
+					if(flag==1)document.getElementById("ser_addr").innerHTML = "主机"
+					else document.getElementById("ser_addr").innerHTML = "Master"
+				}
+				else if(address==1)
+				{
+					if(flag==1)document.getElementById("ser_addr").innerHTML = "副机一"
+					else document.getElementById("ser_addr").innerHTML = "Slave  1"				
+				}
+				else if(address==2)
+				{
+					if(flag==1)document.getElementById("ser_addr").innerHTML = "副机二"
+					else document.getElementById("ser_addr").innerHTML = "Slave  2"				
+				}
+				else if(address==3)
+				{
+					if(flag==1)document.getElementById("ser_addr").innerHTML = "副机三"
+					else document.getElementById("ser_addr").innerHTML = "Slave  3"				
+				}				
+			}							
+			if(flag==1)
+			{
+			  if(type==1){document.getElementById("type").innerHTML = "总监测";}
+			  else if(type==2){document.getElementById("type").innerHTML = "单元监测";}
+			  else if(type==3){document.getElementById("type").innerHTML = "单元控制";}
+			  else if(type==4){document.getElementById("type").innerHTML = "监测&控制";}				
+			}
+			else
+			{			
+			  if(type==1){document.getElementById("type").innerHTML = "Total Monitoring";}
+			  else if(type==2){document.getElementById("type").innerHTML = "Outlet Monitoring";}
+			  else if(type==3){document.getElementById("type").innerHTML = "Outlet Switching";}
+			  else if(type==4){document.getElementById("type").innerHTML = "Outlet Monitoring & Switching";}							
+			}			
+			if(circuit==3)
+			{
+				if(flag==1){document.getElementById("line").innerHTML = "三相";}
+				else {document.getElementById("line").innerHTML = "Three Phase";}							
+			}
+			else
+			{				
+				if(flag==1){document.getElementById("line").innerHTML = "单相";}
+				else {document.getElementById("line").innerHTML = "Single Phase";}	
+			}
+			if(gv[8]==0&&gv[12]==0)
+			{
+				document.getElementById("temp1").innerHTML = "NA";
+				document.getElementById("hum1").innerHTML = "NA";
+				boxTH_rest("temp1",0);
+				boxTH_rest("hum1",1);
+			}
+			else
+			{
+				document.getElementById("temp1").innerHTML = gv[8];    //温度
+				document.getElementById("hum1").innerHTML = gv[12];	
+				if(parseInt(gv[10]) >0)
+				{
+					boxTH_alarm("temp1");
+				}
+				else
+				{
+					boxTH_rest("temp1",0);
+				}
+				if(parseInt(gv[14]) >0)
+				{
+					boxTH_alarm("hum1");									
+				}
+				else
+				{
+					boxTH_rest("hum1",1);
+				}											
+			}			
+			if(gv[9]==0&&gv[13]==0)
+			{
+				document.getElementById("temp2").innerHTML = "NA";			
+				document.getElementById("hum2").innerHTML = "NA";
+				boxTH_rest("temp2",0);
+				boxTH_rest("hum2",1);				
+			}
+			else
+			{
+				document.getElementById("temp2").innerHTML = gv[9];			
+				document.getElementById("hum2").innerHTML = gv[13];
+				if(parseInt(gv[11]) >0)
+				{
+					boxTH_alarm("temp2");							
+				}
+				else
+				{
+					boxTH_rest("temp2",0);
+				}	
+	
+				if(parseInt(gv[15]) >0)
+				{
+					boxTH_alarm("hum2");							
+				}
+				else
+				{
+					boxTH_rest("hum2",1);	
+				}								
+			}
+			//////////sensor box////////////////////////////////////
+			if(parseInt(gv[400]) != 1)
+			{
+				document.getElementById("SBox").style.display = "none";
+			}			
+			if(parseInt(gv[382])>0)  
+			{
+				document.getElementById("boxtem1").innerHTML = gv[396];
+				document.getElementById("boxhum1").innerHTML = gv[397];
+				if(parseInt(gv[388])==2)
+				{
+					boxTH_alarm("boxtem1");					
+				}
+				else
+				{
+					boxTH_rest("boxtem1",0);					
+				}
+				if(parseInt(gv[389])==2)
+				{
+					boxTH_alarm("boxhum1");
+				}
+				else
+				{
+					boxTH_rest("boxhum1",1);				
+				}				
+			}
+			else
+			{
+				document.getElementById("boxtem1").innerHTML = "NA";
+				document.getElementById("boxhum1").innerHTML = "NA";
+				boxTH_rest("boxtem1",0);
+				boxTH_rest("boxhum1",1);								
+			}
+			if(parseInt(gv[383])>0)  
+			{
+				document.getElementById("boxtem2").innerHTML = gv[398];
+				document.getElementById("boxhum2").innerHTML = gv[399];
+				if(parseInt(gv[390])==2)
+				{
+					boxTH_alarm("boxtem2");					
+				}
+				else
+				{
+					boxTH_rest("boxtem2",0);					
+				}
+				if(parseInt(gv[391])==2)
+				{
+					boxTH_alarm("boxhum2");
+				}
+				else
+				{
+					boxTH_rest("boxhum2",1);				
+				}				
+			}
+			else
+			{
+				document.getElementById("boxtem2").innerHTML = "NA";
+				document.getElementById("boxhum2").innerHTML = "NA";
+				boxTH_rest("boxtem2",0);
+				boxTH_rest("boxhum2",1);								
+			}	
+			if(parseInt(gv[384])>0)  
+			{
+				if(parseInt(gv[392])==2)
+				{
+					if(flag==1) document.getElementById("smoke").innerHTML = "报警";
+					else document.getElementById("smoke").innerHTML = "Alarm";
+					boxTH_alarm("smoke");
+				}
+				else
+				{
+					if(flag==1) document.getElementById("smoke").innerHTML = "正常";
+					else document.getElementById("smoke").innerHTML = "Normal";
+					boxTH_rest("smoke",0);	
+				}
+			}
+			else
+			{
+				document.getElementById("smoke").innerHTML = "NA";
+				boxTH_rest("smoke",0);
+			}
+			if(parseInt(gv[385])>0)  
+			{
+				if(parseInt(gv[393])==2)
+				{
+					if(flag==1) document.getElementById("water").innerHTML = "报警";
+					else document.getElementById("water").innerHTML = "Alarm";
+					boxTH_alarm("water");
+				}
+				else
+				{
+					if(flag==1) document.getElementById("water").innerHTML = "正常";
+					else document.getElementById("water").innerHTML = "Normal";
+					boxTH_rest("water",1);	
+				}				
+			}
+			else
+			{
+				document.getElementById("water").innerHTML = "NA";
+				boxTH_rest("water",1);				
+			}	
+			if(parseInt(gv[386])>0)  
+			{
+				if(parseInt(gv[394])==2)
+				{
+					if(flag==1) document.getElementById("door1").innerHTML = "打开";
+					else document.getElementById("door1").innerHTML = "Open";
+					boxTH_alarm("door1");
+				}
+				else
+				{
+					if(flag==1) document.getElementById("door1").innerHTML = "闭合";
+					else document.getElementById("door1").innerHTML = "Closed";	
+					boxTH_rest("door1",0);	
+				}				
+			}
+			else
+			{
+				document.getElementById("door1").innerHTML = "NA";
+				boxTH_rest("door1",0);					
+			}
+			if(parseInt(gv[387])>0)  
+			{
+				if(parseInt(gv[395])==2)
+				{
+					if(flag==1) document.getElementById("door2").innerHTML = "打开";
+					else document.getElementById("door2").innerHTML = "Open";	
+					boxTH_alarm("door2");
+				}
+				else
+				{
+					if(flag==1) document.getElementById("door2").innerHTML = "闭合";
+					else document.getElementById("door2").innerHTML = "Closed";					
+					boxTH_rest("door2",1);	
+				}				
+			}
+			else
+			{
+				document.getElementById("door2").innerHTML = "NA";
+				boxTH_rest("door2",1);				
+			}				
+//////////////////////////////////////////////////////////////////////////////////////																				
+			var m_slave = parseInt(gv[16]);	
+			if(m_slave>0&&gv[338]>0)
+			{
+				if(flag==1)
+				{
+						alert("设备不是主机!");
+				}
+				else 
+				{
+						alert("Equipment is not the host!");						
+				}	
+				setslave(1);			
+				return;									
+			}							
+				
+			for (var i = 0; i < 3; i++)
+			{
+					document.getElementById("tv" + (i + 1)).innerHTML = (parseInt(gv[i * 9 + 17])/10).toFixed(1);  
+					document.getElementById("tc" + (i + 1)).innerHTML = (parseFloat(gv[i * 9 + 18])/100).toFixed(2); 
+					document.getElementById("tpf" + (i + 1)).innerHTML = (parseFloat(gv[i * 9 + 19]) / 100).toFixed(2);
+			        document.getElementById("tpo" + (i + 1)).innerHTML = (parseFloat(gv[i * 9 + 20]) / 1000).toFixed(3);
+					document.getElementById("te" + (i + 1)).innerHTML = (parseFloat(gv[i * 9 + 21]) / 10).toFixed(1);
+					if (gv[i * 9 + 22] == "0")          //断路器
+					{
+						document.getElementById("tb" + (i + 1)).innerHTML = "--";
+						document.getElementById("tb" + (i + 1)).style.color = "#000000";
+					}
+					else if (gv[i * 9 + 22] == "1") 
+					{
+						if(flag==1){document.getElementById("tb" + (i + 1)).innerHTML = "断开";}
+						else{ document.getElementById("tb" + (i + 1)).innerHTML = "Open";}
+						document.getElementById("tb" + (i + 1)).style.backgroundColor = "#FF0000";
+						document.getElementById("tb" + (i + 1)).style.fontWeight="bold";
+						document.getElementById("tb" + (i + 1)).style.border='1px #cccccc solid';
+						document.getElementById("tb" + (i + 1)).style.color = "#FFD700";
+						document.getElementById("tb" + (i + 1)).style.fontSize = "16px";	
+					}
+					else if (gv[i * 9 + 22] == "2") 
+					{
+						if(flag==1){document.getElementById("tb" + (i + 1)).innerHTML = "闭合";}
+						else {document.getElementById("tb" + (i + 1)).innerHTML = "Closed";}
+						document.getElementById("tb" + (i + 1)).style.color = "#000000";
+						document.getElementById("tb" + (i + 1)).style.border='0px #cccccc solid';
+						document.getElementById("tb" + (i + 1)).style.fontWeight="normal";
+						document.getElementById("tb" + (i + 1)).style.fontSize = "14px";
+						if(i+1==1)document.getElementById("tb1").style.backgroundColor = "#dbf2ff";
+						else if(i+1==2)document.getElementById("tb2").style.backgroundColor = "#F5F5F5";
+						else if(i+1==3)document.getElementById("tb3").style.backgroundColor = "#dbf2ff";
+					}		
+					if (gv[i * 9 + 23] >0)       //Tcur aralm
+					{
+						document.getElementById("tc" + (i + 1)).style.backgroundColor = "#FF0000";
+						document.getElementById("tc" + (i + 1)).style.fontWeight="bold";
+						document.getElementById("tc" + (i + 1)).style.border='1px #cccccc solid';
+						document.getElementById("tc" + (i + 1)).style.color = "#FFD700";
+						document.getElementById("tc" + (i + 1)).style.fontSize = "16px";
+					}
+					else 
+					{
+						if (gv[i * 9 + 25] >0)       //Tcur warn
+						{
+							document.getElementById("tc" + (i + 1)).style.backgroundColor = "#E89D12";
+							document.getElementById("tc" + (i + 1)).style.fontWeight="bold";
+							document.getElementById("tc" + (i + 1)).style.border='1px #cccccc solid';
+							document.getElementById("tc" + (i + 1)).style.color = "#000000";
+							document.getElementById("tc" + (i + 1)).style.fontSize = "16px";
+						}
+						else
+						{
+							document.getElementById("tc" + (i+ 1)).style.color = "#000000";
+							document.getElementById("tc" + (i + 1)).style.border='0px #cccccc solid';
+							document.getElementById("tc" + (i + 1)).style.fontWeight="normal";
+							document.getElementById("tc" + (i + 1)).style.fontSize = "14px";						
+							if(i+1==1)document.getElementById("tc1").style.backgroundColor = "#dbf2ff";
+							else if(i+1==2)document.getElementById("tc2").style.backgroundColor = "#F5F5F5";
+							else if(i+1==3)document.getElementById("tc3").style.backgroundColor = "#dbf2ff";							
+						}
+					}																										
+					if (gv[i * 9 + 24] >0)       //Tvol aralm
+					{
+						document.getElementById("tv" + (i + 1)).style.backgroundColor = "#FF0000";
+						document.getElementById("tv" + (i + 1)).style.fontWeight="bold";
+						document.getElementById("tv" + (i + 1)).style.border='1px #cccccc solid';
+						document.getElementById("tv" + (i + 1)).style.color = "#FFD700";
+						document.getElementById("tv" + (i + 1)).style.fontSize = "16px";	
+					}
+					else 
+					{
+						document.getElementById("tv" + (i+ 1)).style.color = "#000000";
+						document.getElementById("tv" + (i + 1)).style.border='0px #cccccc solid';
+						document.getElementById("tv" + (i + 1)).style.fontWeight="normal";
+						document.getElementById("tv" + (i + 1)).style.fontSize = "14px";						
+						if(i+1==1)document.getElementById("tv1").style.backgroundColor = "#dbf2ff";
+						else if(i+1==2)document.getElementById("tv2").style.backgroundColor = "#F5F5F5";
+						else if(i+1==3)document.getElementById("tv3").style.backgroundColor = "#dbf2ff";	
+					}			
+			}//for 				
+			if(type>1)
+			{
+				for (var i = 0; i < 42; i++) 
+				{
+					if(type==2||type==4)
+					{
+						document.getElementById("uc" + (i  + 1)).innerHTML = (parseFloat(gv[i * 7 + 44])/100).toFixed(2); 
+						document.getElementById("upf" + (i + 1)).innerHTML = (parseFloat(gv[i * 7 + 45]) / 100).toFixed(2);				 
+						document.getElementById("upo" + (i + 1)).innerHTML = (parseFloat(gv[i * 7 + 46]) / 1000).toFixed(3);
+						document.getElementById("ue" + (i  + 1)).innerHTML = (parseFloat(gv[i * 7 + 47]) / 10).toFixed(1);									
+						if (gv[i * 7 + 50] >0)       //aralm
+						{
+							document.getElementById("uc" + (i + 1)).style.backgroundColor = "#FF0000";
+							document.getElementById("uc" + (i + 1)).style.fontWeight="bold";
+							document.getElementById("uc" + (i + 1)).style.border='1px #cccccc solid';	
+							document.getElementById("uc" + (i + 1)).style.color = "#FFD700";
+							document.getElementById("uc" + (i + 1)).style.fontSize = "16px";	
+						}
+						else 
+						{
+							if (gv[i * 7 + 49] >0) //warn
+							{
+								document.getElementById("uc" + (i + 1)).style.backgroundColor = "#E89D12";
+								document.getElementById("uc" + (i + 1)).style.fontWeight="bold";
+								document.getElementById("uc" + (i + 1)).style.border='1px #cccccc solid';
+								document.getElementById("uc" + (i + 1)).style.color = "#000000";
+								document.getElementById("uc" + (i + 1)).style.fontSize = "16px";															
+							}
+							else 
+							{
+								document.getElementById("uc" + (i + 1)).style.color = "#000000";
+								document.getElementById("uc" + (i + 1)).style.fontWeight="normal";
+								document.getElementById("uc" + (i + 1)).style.fontSize = "14px";	
+								document.getElementById("uc" + (i + 1)).style.border='0px #cccccc solid';							
+								if((i+1)%2!=0)document.getElementById("uc" + (i + 1)).style.backgroundColor = "#dbf2ff";
+								else document.getElementById("uc" + (i + 1)).style.backgroundColor = "#F5F5F5";	
+							}
+						}						
+					}
+					if(type==3||type==4)
+					{
+						if (gv[i * 7 + 48] == "0")          //switch
+						{
+							document.getElementById("us" + (i  + 1)).innerHTML = "--";
+							document.getElementById("us" + (i  + 1)).style.color = "#000000";
+						}
+						else if (gv[i * 7 + 48] == "1") 
+						{
+							if(flag==1){document.getElementById("us" + (i  + 1)).innerHTML = "关";}
+							else {document.getElementById("us" + (i  + 1)).innerHTML = "OFF";}
+							document.getElementById("us" + (i  + 1)).style.color = "#000000";
+						}
+						else if (gv[i * 7 + 48] == "2") 
+						{
+							if(flag==1){document.getElementById("us" + (i  + 1)).innerHTML = "开";}
+							else {document.getElementById("us" + (i  + 1)).innerHTML = "ON";}
+							document.getElementById("us" + (i + 1)).style.color = "#228822";
+						}	
+						document.getElementById("us" + (i + 1)).style.fontSize = "16px";
+						document.getElementById("us" + (i + 1)).style.fontWeight="bold";												
+					}																	
+				}//for				
+			}//type	
+			if(OnLine==0)
+			{
+				if(flag==1)
+				{
+					if(gv[338]==1){alert("副机1不在线!");}
+					else if(gv[338]==2){alert("副机2不在线!");}
+					else if(gv[338]==3){alert("副机3不在线!");}
+					else if(gv[338]==4){alert("副机4不在线!");}
+				}
+				else 
+				{
+					if(gv[338]==1){alert("Vice machine 1 is not online!");}
+					else if(gv[338]==2){alert("Vice machine 2 is not online!");}
+					else if(gv[338]==3){alert("Vice machine 3 is not online!");}
+					else if(gv[338]==4){alert("Vice machine 4 is not online!");}									
+				}
+				setslave(1);
+				return;		
+			}								
+        }
+    }	
+		
+		function boxTH_alarm(od)
+		{
+			document.getElementById(od).style.backgroundColor = "#FF0000";
+			document.getElementById(od).style.color = "#FFD700";
+			document.getElementById(od).style.fontSize = "16px";
+			document.getElementById(od).style.fontWeight="bold";
+			document.getElementById(od).style.border='1px #cccccc solid';			
+		}		
+		function boxTH_rest(id,or)
+		{
+			if(or==0)
+			{
+				document.getElementById(id).style.backgroundColor = "#dbf2ff";
+			}
+			else
+			{
+				document.getElementById(id).style.backgroundColor = "#F5F5F5";
+			}		
+			document.getElementById(id).style.color = "#000000";
+			document.getElementById(id).style.border='0px #cccccc solid';
+			document.getElementById(id).style.fontWeight="normal";
+			document.getElementById(id).style.fontSize = "14px";				
+		}	
+		function LangFun(flag)
+		{
+			var lang_1 = ["Number", "编号"];	
+			var lang_2= ["Name", "名称"];			
+			var lang_3 = ["Status", "状态"];
+			var lang_4 = ["Voltage (V)", "电压 (V)"];
+			var lang_5 = ["Current (A)", "电流 (A)"];
+			var lang_6 = ["Power Factor", "功率因数"];
+			var lang_7 = ["Active Power (kW)", "功率 (kW)"];
+			var lang_8 = ["Energy (kWh)", "电能 (kWh)"];
+			var lang_9 = ["Circuit Breaker", "断路器"];
+			var lang_10 = ["ON/OFF Status", "开关状态"];
+			var lang_11 = ["Temperature 1", "温度1"];
+			var lang_12 = ["Relative Humidity 1", "湿度1"];			
+			var lang_13 = ["Temperature 2", "温度2"];	
+			var lang_14 = ["Relative Humidity 2", "湿度2"];	
+			var lang_15 = ["Master", "主机"];	
+			var lang_16 = ["Slave 1", "副机 1"];	
+			var lang_17 = ["Slave 2", "副机 2"];	
+			var lang_18 = ["Slave 3", "副机 3"];		
+			var lang_20 = ["Version：", "软件版本："];	
+			var lang_21 = ["Work Mode：", "工作模式："];		
+			var lang_22 = ["Input：", "输入："];			
+            var lang_23 = ["Level：", "功能分类："];
+			var lang_66 = ["Device Information", "设备信息"];
+			var lang_67 = ["Environment Status", "环境状态"];	
+			var lang_50 = ["Smoke sensor", "烟雾传感器"];	
+			var lang_51 = ["Water Lock", "水浸传感器"];	
+			var lang_52 = ["Door 1", "门禁传感器1"];	
+			var lang_53 = ["Door 2", "门禁传感器2"];	
+			var lang_54 = ["Sensor Box", "传感器盒子"];	
+			var lang_55 = ["Temperature 3", "温度3"];
+			var lang_56 = ["Humidity 3", "湿度3"];			
+			var lang_57 = ["Temperature 4", "温度4"];	
+			var lang_58 = ["Humidity 4", "湿度4"];															
+	
+			document.getElementById("lang_1").innerHTML = lang_66[flag];
+			document.getElementById("lang_2").innerHTML = lang_67[flag];
+			document.getElementById("lang_4").innerHTML = lang_11[flag];
+			document.getElementById("lang_5").innerHTML = lang_12[flag];
+			document.getElementById("lang_6").innerHTML = lang_13[flag];
+			document.getElementById("lang_7").innerHTML = lang_14[flag];
+			document.getElementById("lang_8").innerHTML = lang_1[flag];
+			document.getElementById("lang_9").innerHTML = lang_2[flag];
+			document.getElementById("lang_10").innerHTML = lang_4[flag];
+			document.getElementById("lang_11").innerHTML = lang_5[flag];
+			document.getElementById("lang_12").innerHTML = lang_6[flag];
+			document.getElementById("lang_13").innerHTML = lang_7[flag];
+			document.getElementById("lang_14").innerHTML = lang_8[flag];
+			document.getElementById("lang_15").innerHTML = lang_9[flag];
+			document.getElementById("lang_16").innerHTML = lang_1[flag];
+			document.getElementById("lang_17").innerHTML = lang_2[flag];
+			document.getElementById("lang_18").innerHTML = lang_5[flag];
+			document.getElementById("lang_19").innerHTML = lang_6[flag];
+			document.getElementById("lang_20").innerHTML = lang_7[flag];
+			document.getElementById("lang_21").innerHTML = lang_8[flag];
+			document.getElementById("lang_22").innerHTML = lang_10[flag];
+			document.getElementById("lang_28").innerHTML = lang_20[flag];
+			document.getElementById("lang_29").innerHTML = lang_21[flag];
+			document.getElementById("lang_30").innerHTML = lang_22[flag];	
+			document.getElementById("lang_31").innerHTML = lang_23[flag];
+			document.getElementById("lang_23").innerHTML = lang_15[flag];
+			document.getElementById("lang_24").innerHTML = lang_16[flag];
+			document.getElementById("lang_25").innerHTML = lang_17[flag];
+			document.getElementById("lang_26").innerHTML = lang_18[flag];	
+			document.getElementById("sensorbox1").innerHTML = lang_55[flag];
+			document.getElementById("sensorbox2").innerHTML = lang_56[flag];
+			document.getElementById("sensorbox3").innerHTML = lang_57[flag];
+			document.getElementById("sensorbox4").innerHTML = lang_58[flag];
+			document.getElementById("sensorbox5").innerHTML = lang_50[flag];
+			document.getElementById("sensorbox6").innerHTML = lang_51[flag];
+			document.getElementById("sensorbox7").innerHTML = lang_52[flag];
+			document.getElementById("sensorbox8").innerHTML = lang_53[flag];
+			document.getElementById("namebox").innerHTML = lang_54[flag];																																								
+		}	
+		
+				
+		  	
+</script>
+
+</head>
+
+<body onload="pageload();">
+    <div class="stae_menu fleft">
+    <div class="salvestate">
+     <table width="100%" border="0" style=" font-family: Arial; ">
+     <tbody><tr style="color:#FFFFFF;background:#198bc9; font-size:14px; height:25px;">
+     <td style="width:150px;"><div style="margin-left:8px;" id="lang_1">设备信息</div></td>
+     <td></td>
+     </tr>
+     </tbody></table>
+    <table width="100%" border="0" style=" font-family: Arial; ">
+    <tbody><tr id="serial" style="position:absolute; top:40px; left:15px; font-size:13px;">
+    <td style="width:95px;">PDU:</td>
+    <td>
+    <select id="slave" onchange="setslave(0);">
+    <option value="0" selected="" id="lang_23">主机</option>
+    <option value="1" id="lang_24">副机 1</option>
+    <option value="2" id="lang_25">副机 2</option>
+    <option value="3" id="lang_26">副机 3</option>
+    </select>
+    </td>    
+    </tr>    
+    <tr style="position:absolute; top:75px; left:15px; font-size:13px;">
+    <td style="width:95px;" id="lang_28">软件版本：</td>
+    <td id="Version_1">1P/1C/12  15.14.14.0</td>
+    </tr>
+    <tr style="position:absolute; top:105px; left:15px; font-size:13px;">
+    <td style="width:95px;" id="lang_29">工作模式：</td>
+    <td id="ser_addr">主机</td>
+    </tr> 
+    <tr style="position:absolute; top:135px; left:15px; font-size:13px;">
+    <td style="width:95px;" id="lang_30">输入：</td>
+    <td id="line">单相</td>    
+    </tr>   
+    <tr style="position:absolute; top:165px; left:15px; font-size:13px;">
+    <td style="width:95px;" id="lang_31">功能分类：</td>
+    <td id="type">单元监测</td>    
+    </tr>                
+    </tbody></table> 
+ </div>
+<div class="pageTitle"></div>
+ <div class="salvedev">
+  <table width="100%" border="0" style=" font-family: Arial;  ">
+    <tbody><tr style="color:#FFFFFF;background:#198bc9; font-size:14px; height:25px;">
+    <td width="10"></td>
+    <td style="width:180px;" id="lang_2">环境状态</td>
+    <td></td> 
+    <td></td>   
+    </tr> 
+            <tr style="font-size:13px; height:25px;">
+            <td width="10"></td>      
+                <td id="lang_4">温度1</td>
+                <td id="temp1" align="center" width="100" style="background-color: rgb(219, 242, 255); color: rgb(0, 0, 0); border: 0px solid rgb(204, 204, 204); font-weight: normal; font-size: 14px;">NA</td>
+                <td align="center" width="150">℃</td>
+            </tr>
+            <tr style="background-color:#F5F5F5; font-size:13px; height:25px;"> 
+            <td width="10"></td>         	
+                <td id="lang_5">湿度1</td>
+                <td id="hum1" align="center" style="background-color: rgb(245, 245, 245); color: rgb(0, 0, 0); border: 0px solid rgb(204, 204, 204); font-weight: normal; font-size: 14px;">NA</td>
+                <td align="center">%</td>
+            </tr>    
+            <tr style="font-size:13px; height:25px;"> 
+            <td width="10"></td>          
+                <td id="lang_6" height="30">温度2</td>
+                <td id="temp2" align="center" style="background-color: rgb(219, 242, 255); color: rgb(0, 0, 0); border: 0px solid rgb(204, 204, 204); font-weight: normal; font-size: 14px;">NA</td>
+          		<td align="center">℃</td>
+            </tr>
+            <tr style="background-color:#F5F5F5; font-size:13px; height:25px;">
+            <td width="10"></td>   
+                <td id="lang_7">湿度2</td>
+                <td id="hum2" align="center" style="background-color: rgb(245, 245, 245); color: rgb(0, 0, 0); border: 0px solid rgb(204, 204, 204); font-weight: normal; font-size: 14px;">NA</td>
+                <td align="center">%</td>
+            </tr>               
+ </tbody></table>
+  <table id="SBox" width="100%" border="0" style=" font-family: Arial;  ">
+     <tbody><tr style="color:#FFFFFF;background:#198bc9; font-size:14px; height:25px;">
+        <td width="10"></td>
+        <td style="width:180px;" id="namebox">传感器盒子</td>
+        <td></td> 
+        <td></td>   
+   	</tr> 
+            <tr style="font-size:13px; height:25px;">
+            	<td width="10"></td>      
+                <td id="sensorbox1">温度3</td>
+                <td id="boxtem1" align="center" width="100" style="background-color: rgb(219, 242, 255); color: rgb(0, 0, 0); border: 0px solid rgb(204, 204, 204); font-weight: normal; font-size: 14px;">NA</td>
+                <td align="center" width="150">℃</td>
+            </tr> 
+            <tr style="background-color:#F5F5F5; font-size:13px; height:25px;"> 
+            	<td width="10"></td>         	
+                <td id="sensorbox2">湿度3</td>
+                <td id="boxhum1" align="center" style="background-color: rgb(245, 245, 245); color: rgb(0, 0, 0); border: 0px solid rgb(204, 204, 204); font-weight: normal; font-size: 14px;">NA</td>
+                <td align="center">%</td>
+            </tr>    
+            <tr style="font-size:13px; height:25px;"> 
+            	<td width="10"></td>          
+                <td id="sensorbox3" height="30">温度4</td>
+                <td id="boxtem2" align="center" style="background-color: rgb(219, 242, 255); color: rgb(0, 0, 0); border: 0px solid rgb(204, 204, 204); font-weight: normal; font-size: 14px;">NA</td>
+          		<td align="center">℃</td>
+            </tr>
+            <tr style="background-color:#F5F5F5; font-size:13px; height:25px;">
+            	<td width="10"></td>   
+                <td id="sensorbox4">湿度4</td>
+                <td id="boxhum2" align="center" style="background-color: rgb(245, 245, 245); color: rgb(0, 0, 0); border: 0px solid rgb(204, 204, 204); font-weight: normal; font-size: 14px;">NA</td>
+                <td align="center">%</td>
+            </tr> 
+            <tr style="font-size:13px; height:25px;"> 
+            	<td width="10"></td>          
+                <td id="sensorbox5" height="30">烟雾传感器</td>
+                <td id="smoke" align="center" style="background-color: rgb(219, 242, 255); color: rgb(0, 0, 0); border: 0px solid rgb(204, 204, 204); font-weight: normal; font-size: 14px;">NA</td>
+          		<td align="center"></td>
+            </tr>  
+            <tr style="background-color:#F5F5F5; font-size:13px; height:25px;">
+            	<td width="10"></td>   
+                <td id="sensorbox6">水浸传感器</td>
+                <td id="water" align="center" style="background-color: rgb(245, 245, 245); color: rgb(0, 0, 0); border: 0px solid rgb(204, 204, 204); font-weight: normal; font-size: 14px;">NA</td>
+                <td align="center"></td>
+            </tr>  
+            <tr style="font-size:13px; height:25px;"> 
+            	<td width="10"></td>          
+                <td id="sensorbox7" height="30">门禁传感器1</td>
+                <td id="door1" align="center" style="background-color: rgb(219, 242, 255); color: rgb(0, 0, 0); border: 0px solid rgb(204, 204, 204); font-weight: normal; font-size: 14px;">NA</td>
+          		<td align="center"></td>
+            </tr>  
+            <tr style="background-color:#F5F5F5; font-size:13px; height:25px;">
+            	<td width="10"></td>   
+                <td id="sensorbox8">门禁传感器2</td>
+                <td id="door2" align="center" style="background-color: rgb(245, 245, 245); color: rgb(0, 0, 0); border: 0px solid rgb(204, 204, 204); font-weight: normal; font-size: 14px;">NA</td>
+                <td align="center"></td>
+            </tr>                                                                                             
+                
+ </tbody></table>      
+    </div>
+    </div>  <!--#menu fleft --> 
+<div class="pagestate">
+<div class="statedev">
+ <table id="total" width="100%" border="0" style="font-size:13px; font-family: Arial;">
+            <tbody><tr align="center" style="color:#FFFFFF;background:#198bc9;">
+                <td width="10%" height="26px" id="lang_8">编号</td>
+                <td width="12%" id="lang_9">名称</td>
+                <td width="13%" id="lang_10">电压 (V)</td>
+                <td width="13%" id="lang_11">电流 (A)</td>
+                <td width="13%" id="lang_12">功率因数</td>
+                <td width="13%" id="lang_13">功率 (kW)</td>
+                <td width="13%" id="lang_14">电能 (kWh)</td>      
+                 <td width="13%" id="lang_15">断路器</td>                  
+            </tr>
+            <tr align="center" id="l1">
+            	<td height="22px" id="la1">1</td>
+                <td id="Li1">L1</td>
+                <td id="tv1" style="color: rgb(0, 0, 0); border: 0px solid rgb(204, 204, 204); font-weight: normal; font-size: 14px; background-color: rgb(219, 242, 255);">232.6</td>
+                <td id="tc1" style="color: rgb(0, 0, 0); border: 0px solid rgb(204, 204, 204); font-weight: normal; font-size: 14px; background-color: rgb(219, 242, 255);">5.78</td>
+                <td id="tpf1">0.95</td>
+                <td id="tpo1">1.290</td>
+                <td id="te1">4243.7</td> 
+                <td id="tb1" style="color: rgb(0, 0, 0); border: 0px solid rgb(204, 204, 204); font-weight: normal; font-size: 14px; background-color: rgb(219, 242, 255);">闭合</td>                
+            </tr>
+            <tr align="center" style="background-color: rgb(245, 245, 245); display: none;" id="l2">
+            	<td height="22px" id="la2">2</td>
+                <td id="Li2">L2</td>
+                <td id="tv2" style="color: rgb(0, 0, 0); border: 0px solid rgb(204, 204, 204); font-weight: normal; font-size: 14px; background-color: rgb(245, 245, 245);">0.0</td>
+                <td id="tc2" style="color: rgb(0, 0, 0); border: 0px solid rgb(204, 204, 204); font-weight: normal; font-size: 14px; background-color: rgb(245, 245, 245);">0.00</td>
+                <td id="tpf2">0.00</td>
+                <td id="tpo2">0.000</td>
+                <td id="te2">0.0</td> 
+                <td id="tb2" style="color: rgb(0, 0, 0);">--</td>                
+            </tr>    
+            <tr align="center" id="l3" style="display: none;">
+            	<td height="22px" id="la3">3</td>
+                <td id="Li3">L3</td>
+                <td id="tv3" style="color: rgb(0, 0, 0); border: 0px solid rgb(204, 204, 204); font-weight: normal; font-size: 14px; background-color: rgb(219, 242, 255);">0.0</td>
+                <td id="tc3" style="color: rgb(0, 0, 0); border: 0px solid rgb(204, 204, 204); font-weight: normal; font-size: 14px; background-color: rgb(219, 242, 255);">0.00</td>
+                <td id="tpf3">0.00</td>
+                <td id="tpo3">0.000</td>
+                <td id="te3">0.0</td> 
+                <td id="tb3" style="color: rgb(0, 0, 0);">--</td>               
+            </tr>                                          
+ </tbody></table>
+</div>
+<div class="pageTitle"></div>
+<div class="stateinto">
+ <table id="unit" width="100%" border="0" style="font-size:13px; font-family: Arial;">
+            <tbody><tr align="center" style="color:#FFFFFF;background:#198bc9;">
+                <td width="10%" height="26px" id="lang_16">编号</td>
+                <td width="17%" id="lang_17">名称</td>
+                <td width="15%" id="lang_18">电流 (A)</td>
+                <td width="15%" id="lang_19">功率因数</td>
+                <td width="15%" id="lang_20">功率 (kW)</td>
+                <td width="15%" id="lang_21">电能 (kWh)</td>      
+                 <td width="13%" id="lang_22">开关状态</td>       
+            </tr>
+            <tr align="center" id="tr1" style="">
+                <td height="22px">1</td>
+                <td id="output1">Output1</td>
+                <td id="uc1" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(219, 242, 255);">0.64</td>
+                <td id="upf1">0.97</td>
+                <td id="upo1">0.144</td>
+                <td id="ue1">466.4</td>
+                <td id="us1">--</td>
+            </tr>
+            <tr align="center" id="tr2" style="background-color: rgb(245, 245, 245);">
+                <td height="22px">2</td>
+                <td id="output2">Output2</td> 
+                <td id="uc2" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(245, 245, 245);">0.65</td>
+                <td id="upf2">0.96</td>
+                <td id="upo2">0.145</td>
+                <td id="ue2">480.2</td>
+                <td id="us2">--</td>        
+            </tr>
+            <tr align="center" id="tr3" style="">
+                <td height="22px">3</td>
+                <td id="output3">Output3</td>
+                <td id="uc3" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(219, 242, 255);">0.64</td>
+                <td id="upf3">0.97</td>
+                <td id="upo3">0.144</td>
+                <td id="ue3">476.8</td>
+                <td id="us3">--</td>
+            </tr>
+            <tr align="center" id="tr4" style="background-color: rgb(245, 245, 245);">
+                <td height="22px">4</td>
+                <td id="output4">Output4</td>
+                <td id="uc4" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(245, 245, 245);">0.65</td>
+                <td id="upf4">0.96</td>
+                <td id="upo4">0.145</td>
+                <td id="ue4">475.3</td> 
+                <td id="us4">--</td>          
+            </tr>
+            <tr align="center" id="tr5" style="">
+                <td height="22px">5</td>
+                <td id="output5">Output5</td>
+                <td id="uc5" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(219, 242, 255);">0.65</td>
+                <td id="upf5">0.95</td>
+                <td id="upo5">0.143</td>
+                <td id="ue5">480.3</td>
+                <td id="us5">--</td>     
+            </tr>
+            <tr align="center" id="tr6" style="background-color: rgb(245, 245, 245);">
+                <td height="22px">6</td>
+                <td id="output6">Output6</td>
+                <td id="uc6" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(245, 245, 245);">0.64</td>
+                <td id="upf6">0.96</td>
+                <td id="upo6">0.143</td>
+                <td id="ue6">451.9</td>
+                <td id="us6">--</td>      
+            </tr>
+            <tr align="center" id="tr7" style="">
+                <td height="22px">7</td>
+                <td id="output7">Output7</td>
+                <td id="uc7" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(219, 242, 255);">0.61</td>
+                <td id="upf7">0.95</td>
+                <td id="upo7">0.135</td>
+                <td id="ue7">447.1</td>
+                <td id="us7">--</td>     
+            </tr>
+            <tr align="center" id="tr8" style="background-color: rgb(245, 245, 245);">
+                <td height="22px">8</td>
+                <td id="output8">Output8</td>
+                <td id="uc8" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(245, 245, 245);">0.64</td>
+                <td id="upf8">0.97</td>
+                <td id="upo8">0.144</td>
+                <td id="ue8">475.5</td>
+                <td id="us8">--</td>      
+            </tr>
+            <tr align="center" id="tr9" style="">
+                <td height="22px">9</td>
+                <td id="output9">Output9</td>
+                <td id="uc9" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(219, 242, 255);">0.66</td>
+                <td id="upf9">0.96</td>
+                <td id="upo9">0.147</td>
+                <td id="ue9">490.2</td>
+                <td id="us9">--</td>
+            </tr>
+            <tr align="center" id="tr10" style="background-color: rgb(245, 245, 245);">
+                <td height="22px">10</td>
+                <td id="output10">Output10</td>
+                <td id="uc10" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(245, 245, 245);">0.00</td>
+                <td id="upf10">0.00</td>
+                <td id="upo10">0.000</td>
+                <td id="ue10">0.0</td>
+                <td id="us10">--</td>
+            </tr>
+            <tr align="center" id="tr11" style="">
+                <td height="22px">11</td>
+                <td id="output11">Output11</td>
+                <td id="uc11" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(219, 242, 255);">0.00</td>
+                <td id="upf11">0.00</td>
+                <td id="upo11">0.000</td>
+                <td id="ue11">0.0</td>
+                <td id="us11">--</td>       
+            </tr>
+            <tr align="center" id="tr12" style="background-color: rgb(245, 245, 245);">
+                <td height="22px">12</td>
+                <td id="output12">Output12</td>
+                <td id="uc12" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(245, 245, 245);">0.00</td>
+                <td id="upf12">0.00</td>
+                <td id="upo12">0.000</td>
+                <td id="ue12">0.0</td>
+                <td id="us12">--</td>         
+            </tr>
+            <tr align="center" id="tr13" style="display:none;">
+                <td height="22px">13</td>
+                <td id="output13"></td>
+                <td id="uc13" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(219, 242, 255);">0.00</td>
+                <td id="upf13">0.00</td>
+                <td id="upo13">0.000</td>
+                <td id="ue13">0.0</td>
+                <td id="us13">--</td>        
+            </tr>
+            <tr align="center" id="tr14" style="background-color:#F5F5F5; display:none;">
+                <td height="22px">14</td>
+                <td id="output14"></td>
+                <td id="uc14" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(245, 245, 245);">0.00</td>
+                <td id="upf14">0.00</td>
+                <td id="upo14">0.000</td>
+                <td id="ue14">0.0</td>
+                <td id="us14">--</td>         
+            </tr>
+            <tr align="center" id="tr15" style="display:none;">
+                <td height="22px">15</td>
+                <td id="output15"></td>
+                <td id="uc15" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(219, 242, 255);">0.00</td>
+                <td id="upf15">0.00</td>
+                <td id="upo15">0.000</td>
+                <td id="ue15">0.0</td>
+                <td id="us15">--</td>           
+            </tr>
+            <tr align="center" id="tr16" style="background-color:#F5F5F5; display:none;">
+                <td height="22px">16</td>
+                <td id="output16"></td>
+                <td id="uc16" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(245, 245, 245);">0.00</td>
+                <td id="upf16">0.00</td>
+                <td id="upo16">0.000</td>
+                <td id="ue16">0.0</td>
+                <td id="us16">--</td>         
+            </tr>
+            <tr align="center" id="tr17" style="display:none;">
+                <td height="22px">17</td>
+                <td id="output17"></td>
+                <td id="uc17" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(219, 242, 255);">0.00</td>
+                <td id="upf17">0.00</td>
+                <td id="upo17">0.000</td>
+                <td id="ue17">0.0</td>
+                <td id="us17">--</td>               
+            </tr>
+            <tr align="center" id="tr18" style="background-color:#F5F5F5; display:none;">
+                <td height="22px">18</td>
+                <td id="output18"></td>
+                <td id="uc18" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(245, 245, 245);">0.00</td>
+                <td id="upf18">0.00</td>
+                <td id="upo18">0.000</td>
+                <td id="ue18">0.0</td>
+                <td id="us18">--</td>         
+            </tr>
+            <tr align="center" id="tr19" style="display:none;">
+                <td height="22px">19</td>
+                <td id="output19"></td>
+                <td id="uc19" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(219, 242, 255);">0.00</td>
+                <td id="upf19">0.00</td>
+                <td id="upo19">0.000</td>
+                <td id="ue19">0.0</td>
+                <td id="us19">--</td>       
+            </tr>
+            <tr align="center" id="tr20" style="background-color:#F5F5F5; display:none;">
+                <td height="22px">20</td>
+                <td id="output20"></td>
+                <td id="uc20" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(245, 245, 245);">0.00</td>
+                <td id="upf20">0.00</td>
+                <td id="upo20">0.000</td>
+                <td id="ue20">0.0</td>
+                <td id="us20">--</td>         
+            </tr>
+            <tr align="center" id="tr21" style="display:none;">
+                <td height="22px">21</td>
+                <td id="output21"></td>
+                <td id="uc21" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(219, 242, 255);">0.00</td>
+                <td id="upf21">0.00</td>
+                <td id="upo21">0.000</td>
+                <td id="ue21">0.0</td>
+                <td id="us21">--</td>       
+            </tr>
+            <tr align="center" id="tr22" style="background-color:#F5F5F5; display:none;">
+                <td height="22px">22</td>
+                <td id="output22"></td>
+                <td id="uc22" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(245, 245, 245);">0.00</td>
+                <td id="upf22">0.00</td>
+                <td id="upo22">0.000</td>
+                <td id="ue22">0.0</td>
+                <td id="us22">--</td>           
+            </tr>
+            <tr align="center" id="tr23" style="display:none;">
+                <td height="22px">23</td>
+                <td id="output23"></td>
+                <td id="uc23" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(219, 242, 255);">0.00</td>
+                <td id="upf23">0.00</td>
+                <td id="upo23">0.000</td>
+                <td id="ue23">0.0</td>
+                <td id="us23">--</td>                
+            </tr>
+            <tr align="center" id="tr24" style="background-color:#F5F5F5; display:none;">
+                <td height="22px">24</td>
+                <td id="output24"></td>
+                <td id="uc24" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(245, 245, 245);">0.00</td>
+                <td id="upf24">0.00</td>
+                <td id="upo24">0.000</td>
+                <td id="ue24">0.0</td>
+                <td id="us24">--</td>      
+            </tr> 
+            <tr align="center" id="tr25" style="display:none;">
+                <td height="22px">25</td>
+                <td id="output25"></td>
+                <td id="uc25" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(219, 242, 255);">0.00</td>
+                <td id="upf25">0.00</td>
+                <td id="upo25">0.000</td>
+                <td id="ue25">0.0</td>
+                <td id="us25">--</td>               
+            </tr>
+            <tr align="center" id="tr26" style="background-color:#F5F5F5; display:none;">
+                <td height="22px">26</td>
+                <td id="output26"></td>
+                <td id="uc26" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(245, 245, 245);">0.00</td>
+                <td id="upf26">0.00</td>
+                <td id="upo26">0.000</td>
+                <td id="ue26">0.0</td>
+                <td id="us26">--</td>       
+            </tr>   
+             <tr align="center" id="tr27" style="display:none;">
+                <td height="22px">27</td>
+                <td id="output27"></td>
+                <td id="uc27" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(219, 242, 255);">0.00</td>
+                <td id="upf27">0.00</td>
+                <td id="upo27">0.000</td>
+                <td id="ue27">0.0</td>
+                <td id="us27">--</td>              
+            </tr>
+            <tr align="center" id="tr28" style="background-color:#F5F5F5; display:none;">
+                <td height="22px">28</td>
+                <td id="output28"></td>
+                <td id="uc28" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(245, 245, 245);">0.00</td>
+                <td id="upf28">0.00</td>
+                <td id="upo28">0.000</td>
+                <td id="ue28">0.0</td>
+                <td id="us28">--</td>     
+            </tr>  
+            <tr align="center" id="tr29" style="display:none;">
+                <td height="22px">29</td>
+                <td id="output29"></td>
+                <td id="uc29" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(219, 242, 255);">0.00</td>
+                <td id="upf29">0.00</td>
+                <td id="upo29">0.000</td>
+                <td id="ue29">0.0</td>
+                <td id="us29">--</td>                
+            </tr>
+            <tr align="center" id="tr30" style="background-color:#F5F5F5; display:none;">
+                <td height="22px">30</td>
+                <td id="output30"></td>
+                <td id="uc30" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(245, 245, 245);">0.00</td>
+                <td id="upf30">0.00</td>
+                <td id="upo30">0.000</td>
+                <td id="ue30">0.0</td>
+                <td id="us30">--</td>      
+            </tr> 
+            <tr align="center" id="tr31" style="display:none;">
+                <td height="22px">31</td>
+                <td id="output31"></td>
+                <td id="uc31" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(219, 242, 255);">0.00</td>
+                <td id="upf31">0.00</td>
+                <td id="upo31">0.000</td>
+                <td id="ue31">0.0</td>
+                <td id="us31">--</td>               
+            </tr>
+            <tr align="center" id="tr32" style="background-color:#F5F5F5; display:none;">
+                <td height="22px">32</td>
+                <td id="output32"></td>
+                <td id="uc32" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(245, 245, 245);">0.00</td>
+                <td id="upf32">0.00</td>
+                <td id="upo32">0.000</td>
+                <td id="ue32">0.0</td>
+                <td id="us32">--</td>      
+            </tr>  
+             <tr align="center" id="tr33" style="display:none;">
+                <td height="22px">33</td>
+                <td id="output33"></td>
+                <td id="uc33" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(219, 242, 255);">0.00</td>
+                <td id="upf33">0.00</td>
+                <td id="upo33">0.000</td>
+                <td id="ue33">0.0</td>
+                <td id="us33">--</td>              
+            </tr>
+            <tr align="center" id="tr34" style="background-color:#F5F5F5; display:none;">
+                <td height="22px">34</td>
+                <td id="output34"></td>
+                <td id="uc34" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(245, 245, 245);">0.00</td>
+                <td id="upf34">0.00</td>
+                <td id="upo34">0.000</td>
+                <td id="ue34">0.0</td>
+                <td id="us34">--</td>       
+            </tr> 
+            <tr align="center" id="tr35" style="display:none;">
+                <td height="22px">35</td>
+                <td id="output35"></td>
+                <td id="uc35" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(219, 242, 255);">0.00</td>
+                <td id="upf35">0.00</td>
+                <td id="upo35">0.000</td>
+                <td id="ue35">0.0</td>
+                <td id="us35">--</td>               
+            </tr>
+            <tr align="center" id="tr36" style="background-color:#F5F5F5; display:none;">
+                <td height="22px">36</td>
+                <td id="output36"></td>
+                <td id="uc36" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(245, 245, 245);">0.00</td>
+                <td id="upf36">0.00</td>
+                <td id="upo36">0.000</td>
+                <td id="ue36">0.0</td>
+                <td id="us36">--</td>      
+            </tr> 
+             <tr align="center" id="tr37" style="display:none;">
+                <td height="22px">37</td>
+                <td id="output37"></td>
+                <td id="uc37" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(219, 242, 255);">0.00</td>
+                <td id="upf37">0.00</td>
+                <td id="upo37">0.000</td>
+                <td id="ue37">0.0</td>
+                <td id="us37">--</td>               
+            </tr>
+            <tr align="center" id="tr38" style="background-color:#F5F5F5; display:none;">
+                <td height="22px">38</td>
+                <td id="output38"></td>
+                <td id="uc38" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(245, 245, 245);">0.00</td>
+                <td id="upf38">0.00</td>
+                <td id="upo38">0.000</td>
+                <td id="ue38">0.0</td> 
+                <td id="us38">--</td>    
+            </tr>
+            <tr align="center" id="tr39" style="display:none;">
+                <td height="22px">39</td>
+                <td id="output39"></td>
+                <td id="uc39" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(219, 242, 255);">0.00</td>
+                <td id="upf39">0.00</td>
+                <td id="upo39">0.000</td>
+                <td id="ue39">0.0</td>
+                <td id="us39">--</td>                
+            </tr>
+            <tr align="center" id="tr40" style="background-color:#F5F5F5; display:none;">
+                <td height="22px">40</td>
+                <td id="output40"></td>
+                <td id="uc40" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(245, 245, 245);">0.00</td>
+                <td id="upf40">0.00</td>
+                <td id="upo40">0.000</td>
+                <td id="ue40">0.0</td>
+                <td id="us40">--</td>       
+            </tr>             
+            <tr align="center" id="tr41" style="display:none;">
+                <td height="22px">41</td>
+                <td id="output41"></td>
+                <td id="uc41" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(219, 242, 255);">0.00</td>
+                <td id="upf41">0.00</td>
+                <td id="upo41">0.000</td>
+                <td id="ue41">0.0</td>
+                <td id="us41">--</td>              
+            </tr>
+            <tr align="center" id="tr42" style="background-color:#F5F5F5; display:none;">
+                <td height="22px">42</td>
+                <td id="output42"></td>
+                <td id="uc42" style="color: rgb(0, 0, 0); font-weight: normal; font-size: 14px; border: 0px solid rgb(204, 204, 204); background-color: rgb(245, 245, 245);">0.00</td>
+                <td id="upf42">0.00</td>
+                <td id="upo42">0.000</td>
+                <td id="ue42">0.0</td>
+                <td id="us42">--</td>     
+            </tr>                                                                   
+ </tbody></table>
+</div>
+</div>
+
+
+</body></html>

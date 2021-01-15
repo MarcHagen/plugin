@@ -1,0 +1,31 @@
+{
+  "manifest_version": 2,
+  "name": "PDUMAC",
+  "version": "1.0.0",
+  "description": "simplify the modify with mac adress",
+  "homepage_url": "https://www.juetan.cn",
+  "icons":{
+		"16": "images/icon.png",
+		"48": "images/icon.png",
+		"128": "images/icon.png"
+	},
+  "page_action": { 
+    "default_title": "clean all ad in page",
+    "default_popup": "popup.html",
+    "default_icon": "images/icon.png",
+    "permissions": [
+        "tabs",
+        "bookmarks",
+        "http://*.google.com/", 
+        "unlimitedStorage"
+      ]
+  },
+  "content_scripts":[
+    {
+      "matches": ["<all_urls>"],
+      "js": ["./content_scripts/jquery.min.js","./content_scripts/common/index.js"],
+      "css": ["./content_scripts/common/index.css"],
+      "run_at": "document_end"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+#id {
+  display: block;
+}
+
+div {
+  position: relative;
+}
+
+p {
+  position: absolute;
+  color: #a6d2ff;
+  font: italic small-caps 700 14px/1 'Microsoft YaHei';
+}
+/*# sourceMappingURL=index.css.map */
